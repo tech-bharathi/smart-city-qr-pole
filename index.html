@@ -1,607 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SMART CITY QR POLE :: SATELLITE COMMAND :: CHITTOOR</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-<style>
-/* ══════════════════════════════════════════════════════
-   HACKER / MATRIX THEME — CSS VARIABLES
-══════════════════════════════════════════════════════ */
-:root {
-  --green:       #00ff41;
-  --green-dim:   #00cc33;
-  --green-dark:  #003311;
-  --green-glow:  rgba(0,255,65,0.4);
-  --cyan:        #00ffe5;
-  --cyan-dim:    rgba(0,255,229,0.6);
-  --red-hack:    #ff003c;
-  --amber:       #ffb700;
-  --bg:          #000000;
-  --bg2:         #020c02;
-  --bg3:         #030f03;
-  --panel-bg:    rgba(0,20,4,0.92);
-  --card-bg:     rgba(0,15,3,0.88);
-  --border:      rgba(0,255,65,0.2);
-  --border-bright: rgba(0,255,65,0.5);
-  --text-main:   #00ff41;
-  --text-dim:    rgba(0,255,65,0.55);
-  --text-faint:  rgba(0,255,65,0.3);
-  --font-mono:   'Courier New', 'Lucida Console', monospace;
-  --font-sans:   'Courier New', monospace;
-  --r-lg:        10px;
-  --r-md:        6px;
-}
-
-/* ══ RESET & BASE ══ */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: var(--font-mono);
-  background: var(--bg);
-  color: var(--text-main);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  padding: 0.75rem;
-  overflow-x: hidden;
-  position: relative;
-}
-
-/* ══ MATRIX RAIN CANVAS ══ */
-#matrix-canvas {
-  position: fixed; top:0; left:0; width:100%; height:100%;
-  z-index: 0; pointer-events: none; opacity: 0.07;
-}
-
-/* ══ SCANLINES OVERLAY ══ */
-body::before {
-  content: '';
-  position: fixed; inset: 0; z-index: 1; pointer-events: none;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0,0,0,0.15) 2px,
-    rgba(0,0,0,0.15) 4px
-  );
-}
-
-/* ══ SCREEN FLICKER ══ */
-@keyframes flicker {
-  0%,96%,98%,100% { opacity:1; }
-  97% { opacity:0.92; }
-  99% { opacity:0.97; }
-}
-.app { position: relative; z-index: 2; max-width: 720px; width:100%; animation: flicker 8s infinite; }
-
-/* ══ GLITCH TEXT ══ */
-@keyframes glitch1 {
-  0%,90%,100%{ clip-path:inset(0 0 100% 0); transform:translate(0); }
-  92%{ clip-path:inset(20% 0 40% 0); transform:translate(-3px,1px); }
-  94%{ clip-path:inset(60% 0 10% 0); transform:translate(3px,-1px); }
-  96%{ clip-path:inset(40% 0 30% 0); transform:translate(-2px,2px); }
-}
-@keyframes glitch2 {
-  0%,85%,100%{ opacity:0; }
-  87%,89%{ opacity:0.8; transform:translate(2px,-1px); }
-  88%{ opacity:0; }
-  90%{ opacity:0.6; transform:translate(-2px,1px); }
-}
-.glitch-wrap { position:relative; display:inline-block; }
-.glitch-wrap::before,.glitch-wrap::after {
-  content:attr(data-text); position:absolute; top:0; left:0; width:100%;
-  background:transparent;
-}
-.glitch-wrap::before { color:#ff003c; animation:glitch1 4s infinite; }
-.glitch-wrap::after  { color:#00ffe5; animation:glitch2 4s infinite; }
-
-/* ══ NEON GLOW KEYFRAMES ══ */
-@keyframes neonPulse {
-  0%,100%{ text-shadow:0 0 5px var(--green),0 0 10px var(--green),0 0 20px var(--green); }
-  50%{ text-shadow:0 0 10px var(--green),0 0 25px var(--green),0 0 50px var(--green),0 0 80px rgba(0,255,65,0.3); }
-}
-@keyframes borderPulse {
-  0%,100%{ box-shadow:0 0 5px var(--green-glow),inset 0 0 5px rgba(0,255,65,0.05); }
-  50%{ box-shadow:0 0 15px var(--green-glow),0 0 30px rgba(0,255,65,0.2),inset 0 0 10px rgba(0,255,65,0.08); }
-}
-@keyframes scanLine {
-  0%{ top:-2px; }
-  100%{ top:102%; }
-}
-@keyframes typeIn {
-  from{ width:0; }
-  to{ width:100%; }
-}
-@keyframes blink {
-  0%,100%{ opacity:1; } 50%{ opacity:0; }
-}
-@keyframes fadeSlideUp {
-  from{ opacity:0; transform:translateY(16px); }
-  to{ opacity:1; transform:translateY(0); }
-}
-@keyframes countUp {
-  from{ opacity:0; transform:scale(0.6) translateY(8px); }
-  to{ opacity:1; transform:scale(1) translateY(0); }
-}
-@keyframes spin360 {
-  from{ transform:translate(-50%,-50%) rotate(0deg); }
-  to{ transform:translate(-50%,-50%) rotate(360deg); }
-}
-@keyframes dataStream {
-  0%{ transform:translateY(-100%); opacity:0; }
-  10%{ opacity:1; }
-  90%{ opacity:1; }
-  100%{ transform:translateY(100vh); opacity:0; }
-}
-@keyframes ripple {
-  0%{ transform:scale(0); opacity:0.8; }
-  100%{ transform:scale(4); opacity:0; }
-}
-
-/* ══ HEADER ══ */
-.hdr {
-  background: linear-gradient(135deg,#000c02,#001504,#000a02);
-  border: 1px solid var(--border-bright);
-  border-radius: var(--r-lg);
-  padding: 1.25rem;
-  margin-bottom: 10px;
-  position: relative;
-  overflow: hidden;
-  animation: borderPulse 3s ease-in-out infinite;
-}
-.hdr::after {
-  content:'';
-  position:absolute; left:0; right:0; top:-2px; height:2px;
-  background: linear-gradient(90deg,transparent,var(--green),var(--cyan),transparent);
-  animation: scanLine 3s linear infinite;
-}
-/* Corner brackets */
-.hdr::before {
-  content:'';
-  position:absolute; inset:0; pointer-events:none;
-  background:
-    linear-gradient(var(--green),var(--green)) top left / 16px 2px no-repeat,
-    linear-gradient(var(--green),var(--green)) top left / 2px 16px no-repeat,
-    linear-gradient(var(--green),var(--green)) bottom right / 16px 2px no-repeat,
-    linear-gradient(var(--green),var(--green)) bottom right / 2px 16px no-repeat;
-  opacity:0.6;
-}
-.hdr-top { display:flex; align-items:center; gap:14px; margin-bottom:12px; }
-.sat-ring {
-  width:50px; height:50px; border-radius:50%;
-  border:2px solid var(--green);
-  display:flex; align-items:center; justify-content:center;
-  flex-shrink:0; position:relative;
-  background: rgba(0,255,65,0.05);
-  box-shadow: 0 0 15px rgba(0,255,65,0.4), inset 0 0 10px rgba(0,255,65,0.1);
-}
-.sat-ring::after {
-  content:''; position:absolute; width:68px; height:68px; border-radius:50%;
-  border:1px solid rgba(0,255,65,0.25);
-  animation: spin360 6s linear infinite;
-  border-top-color: var(--green);
-}
-.sat-ring i { font-size:20px; color:var(--green); animation:neonPulse 2s infinite; }
-.hdr h1 {
-  font-size:15px; font-weight:700; color:var(--green);
-  text-transform:uppercase; letter-spacing:2px;
-  animation: neonPulse 3s ease-in-out infinite;
-  font-family: var(--font-mono);
-}
-.hdr p { font-size:10px; color:var(--text-dim); margin-top:3px; font-family:var(--font-mono); letter-spacing:1px; }
-.sat-status { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:10px; }
-.sstat { display:flex; align-items:center; gap:5px; font-size:10px; color:var(--text-dim); font-family:var(--font-mono); }
-.sstat-dot { width:7px; height:7px; border-radius:50%; }
-@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.2;transform:scale(0.7)} }
-.pulse { animation:pulse 1.2s infinite; }
-.lang-row { display:flex; gap:5px; flex-wrap:wrap; }
-.lb {
-  padding:3px 8px; border-radius:4px;
-  border:1px solid rgba(0,255,65,0.3);
-  background:rgba(0,255,65,0.04);
-  color:rgba(0,255,65,0.7); font-size:10px; cursor:pointer;
-  font-family:var(--font-mono); transition:all 0.2s;
-}
-.lb:hover { border-color:var(--green); background:rgba(0,255,65,0.1); color:var(--green); }
-.lb.on { background:rgba(0,255,65,0.15); color:var(--green); border-color:var(--green); box-shadow:0 0 8px rgba(0,255,65,0.3); }
-
-/* ══ TERMINAL BOOT BANNER ══ */
-.boot-banner {
-  background:#000; border:1px solid var(--border); border-radius:var(--r-md);
-  padding:8px 12px; margin-bottom:10px; font-size:10px;
-  color:var(--green-dim); font-family:var(--font-mono); overflow:hidden;
-}
-.boot-line { white-space:nowrap; overflow:hidden; }
-.boot-line.t1 { animation:typeIn 1.2s steps(60) 0.1s both; }
-.boot-line.t2 { animation:typeIn 1.0s steps(50) 1.0s both; }
-.boot-line.t3 { animation:typeIn 0.8s steps(40) 1.8s both; }
-.cursor { display:inline-block; animation:blink 0.8s infinite; color:var(--green); }
-
-/* ══ LIVE TICKER ══ */
-.live-ticker {
-  background:#000;
-  border:1px solid var(--border);
-  border-radius:var(--r-md);
-  padding:7px 12px; margin-bottom:10px;
-  overflow:hidden; position:relative;
-}
-.live-ticker::before {
-  content:'>> LIVE'; position:absolute; left:0; top:0; bottom:0;
-  padding:0 8px; background:var(--green); color:#000;
-  font-size:9px; font-weight:700; font-family:var(--font-mono);
-  display:flex; align-items:center; z-index:2; letter-spacing:1px;
-}
-.ticker-inner {
-  display:flex; gap:40px; animation:ticker 22s linear infinite;
-  white-space:nowrap; padding-left:60px;
-}
-@keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-.ticker-item { font-size:10px; color:var(--text-dim); display:flex; align-items:center; gap:6px; flex-shrink:0; font-family:var(--font-mono); }
-.ticker-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
-.live-ticker:hover .ticker-inner { animation-play-state:paused; }
-
-/* ══ NAV BUTTONS ══ */
-.nav {
-  display:flex; gap:5px; margin-bottom:10px;
-  overflow-x:auto; padding-bottom:5px;
-  scrollbar-width:thin; scrollbar-color:rgba(0,255,65,0.3) transparent;
-  -webkit-overflow-scrolling:touch;
-  flex-wrap:nowrap;
-}
-.nav::-webkit-scrollbar { height:3px; }
-.nav::-webkit-scrollbar-thumb { background:rgba(0,255,65,0.3); border-radius:3px; }
-.nb {
-  padding:7px 12px; border-radius:var(--r-md);
-  border:1px solid rgba(0,255,65,0.25);
-  background:rgba(0,10,2,0.8);
-  font-size:11px; color:var(--text-dim);
-  cursor:pointer; display:flex; align-items:center; gap:5px;
-  font-family:var(--font-mono); transition:all 0.2s;
-  letter-spacing:0.3px;
-  position:relative; overflow:hidden;
-  white-space:nowrap; flex-shrink:0;
-  min-width:max-content;
-}
-.nb:hover { border-color:var(--green); color:var(--green); background:rgba(0,255,65,0.06); box-shadow:0 0 10px rgba(0,255,65,0.15); }
-.nb.on { background:rgba(0,255,65,0.12); color:var(--green); border-color:var(--green); box-shadow:0 0 12px rgba(0,255,65,0.3); }
-.nb i { font-size:13px; flex-shrink:0; }
-.nb span { display:inline-block; }
-.nb::after { content:''; position:absolute; top:50%; left:50%; width:0; height:0; background:rgba(0,255,65,0.2); border-radius:50%; transform:translate(-50%,-50%); transition:width 0.5s,height 0.5s,opacity 0.5s; opacity:0; }
-.nb:active::after { width:200px; height:200px; opacity:0; transition:0s; }
-
-/* ══ PANELS ══ */
-.panel { display:none; }
-.panel.on { display:block; animation:fadeSlideUp 0.3s ease; }
-
-/* ══ CARDS ══ */
-.card {
-  background:var(--card-bg);
-  border:1px solid var(--border);
-  border-radius:var(--r-lg);
-  padding:1rem; margin-bottom:10px;
-  position:relative; overflow:hidden;
-  transition:border-color 0.3s, box-shadow 0.3s;
-}
-.card:hover { border-color:rgba(0,255,65,0.4); box-shadow:0 0 16px rgba(0,255,65,0.08); }
-.card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:1px;
-  background:linear-gradient(90deg,transparent,var(--green),transparent);
-  opacity:0.4;
-}
-.ct {
-  font-size:10px; color:var(--text-dim);
-  text-transform:uppercase; letter-spacing:1.5px;
-  margin-bottom:12px; display:flex; align-items:center; gap:6px;
-  font-family:var(--font-mono);
-  border-bottom:1px solid var(--border); padding-bottom:8px;
-}
-.ct i { font-size:13px; color:var(--green); }
-.ct::before { content:'['; color:var(--green); }
-.ct::after  { content:']'; color:var(--green); }
-
-/* ══ GRIDS ══ */
-.g2 { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-bottom:10px; }
-.g3 { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; }
-.g4 { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:10px; }
-
-/* ══ STAT BOXES ══ */
-.stat {
-  background:rgba(0,12,2,0.9); border:1px solid var(--border);
-  border-radius:var(--r-md); padding:10px 12px;
-  transition:all 0.25s; position:relative; overflow:hidden;
-}
-.stat:hover { border-color:var(--green); box-shadow:0 0 12px rgba(0,255,65,0.15); transform:translateY(-2px); }
-.stat::after { content:''; position:absolute; bottom:0; left:0; width:100%; height:1px; background:linear-gradient(90deg,transparent,var(--green-dim),transparent); }
-.sl { font-size:10px; color:var(--text-faint); margin-bottom:4px; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:0.8px; }
-.sv { font-size:22px; font-weight:700; color:var(--green); font-family:var(--font-mono); animation:countUp 0.6s cubic-bezier(0.34,1.56,0.64,1) both; text-shadow:0 0 10px rgba(0,255,65,0.5); }
-.su { font-size:10px; color:var(--text-dim); }
-
-/* ══ ROWS ══ */
-.row { display:flex; align-items:center; padding:8px 0; border-bottom:1px solid rgba(0,255,65,0.08); transition:background 0.2s; }
-.row:last-child { border-bottom:none; }
-.row:hover { background:rgba(0,255,65,0.03); padding-left:4px; }
-
-/* ══ BADGES ══ */
-.badge { padding:2px 8px; border-radius:3px; font-size:10px; font-weight:700; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:0.5px; }
-.bb { background:rgba(0,100,255,0.15); color:#4db8ff; border:1px solid rgba(0,150,255,0.3); }
-.gb { background:rgba(0,255,65,0.1);  color:var(--green); border:1px solid rgba(0,255,65,0.3); }
-.rb { background:rgba(255,0,60,0.15); color:#ff4d7a; border:1px solid rgba(255,0,60,0.35); animation:redPulse 2s infinite; }
-.ab { background:rgba(255,183,0,0.12); color:var(--amber); border:1px solid rgba(255,183,0,0.3); }
-.tb { background:rgba(0,255,229,0.1); color:var(--cyan); border:1px solid rgba(0,255,229,0.3); }
-.pb { background:rgba(170,0,255,0.12); color:#cc66ff; border:1px solid rgba(170,0,255,0.3); }
-@keyframes redPulse { 0%,100%{box-shadow:0 0 4px rgba(255,0,60,0.4)} 50%{box-shadow:0 0 12px rgba(255,0,60,0.7)} }
-
-/* ══ INDIA MAP ══ */
-.india-map {
-  background:linear-gradient(135deg,#000800,#001200,#000a00);
-  border:1px solid var(--border); border-radius:var(--r-lg);
-  overflow:hidden; position:relative; margin-bottom:10px;
-}
-.imap-svg { width:100%; height:360px; }
-.route-line { stroke-dasharray:6,3; animation:dash 1.5s linear infinite; }
-@keyframes dash { to{stroke-dashoffset:-18} }
-.map-ctrl {
-  display:flex; gap:5px; padding:8px 10px;
-  background:rgba(0,8,0,0.9);
-  border-top:1px solid var(--border); flex-wrap:wrap;
-}
-.mc {
-  padding:4px 10px; border-radius:var(--r-md);
-  border:1px solid rgba(0,255,65,0.25);
-  background:rgba(0,255,65,0.04); font-size:10px;
-  color:var(--text-dim); cursor:pointer; font-family:var(--font-mono);
-  text-transform:uppercase; transition:all 0.2s;
-}
-.mc:hover { border-color:var(--green); color:var(--green); }
-.mc.on { background:rgba(0,255,65,0.12); color:var(--green); border-color:var(--green); }
-.city-dot { cursor:pointer; }
-.city-dot circle { transition:r 0.2s, filter 0.2s; }
-.city-dot:hover circle { r:9; filter:drop-shadow(0 0 6px var(--green)); }
-
-/* ══ BUS CARDS ══ */
-.bus-card {
-  border:1px solid var(--border); border-radius:var(--r-md);
-  padding:10px; margin-bottom:8px; background:rgba(0,10,2,0.9);
-  transition:all 0.25s; animation:fadeSlideUp 0.3s ease both;
-}
-.bus-card:hover { border-color:var(--green); box-shadow:0 0 12px rgba(0,255,65,0.12); transform:translateX(4px); }
-.bus-card:nth-child(2){animation-delay:.06s}
-.bus-card:nth-child(3){animation-delay:.12s}
-.bus-card:nth-child(4){animation-delay:.18s}
-.bus-card:nth-child(5){animation-delay:.24s}
-.bc-head { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
-.bc-num {
-  min-width:48px; height:26px; border-radius:var(--r-md);
-  display:flex; align-items:center; justify-content:center;
-  font-size:11px; font-weight:700; font-family:var(--font-mono);
-  background:rgba(0,255,65,0.12); color:var(--green);
-  border:1px solid rgba(0,255,65,0.3);
-  text-shadow:0 0 8px rgba(0,255,65,0.5);
-}
-.bc-name { font-size:12px; font-weight:600; color:var(--green); flex:1; font-family:var(--font-mono); }
-.prog { height:5px; background:rgba(0,255,65,0.08); border-radius:2px; overflow:hidden; margin:5px 0; }
-.prog-f { height:100%; border-radius:2px; position:relative; overflow:hidden; }
-.prog-f::after { content:''; position:absolute; top:0; left:-100%; width:100%; height:100%; background:linear-gradient(90deg,transparent,rgba(255,255,255,0.3),transparent); animation:shimmerBar 2s ease-in-out infinite; }
-@keyframes shimmerBar { 0%{left:-100%} 100%{left:100%} }
-.bc-meta { display:flex; gap:10px; flex-wrap:wrap; }
-.bc-m { font-size:10px; color:var(--text-dim); display:flex; align-items:center; gap:3px; font-family:var(--font-mono); }
-.bc-m i { font-size:11px; }
-
-/* ══ SATELLITE PANEL ══ */
-.sat-panel {
-  background:linear-gradient(135deg,#000c02,#001a04);
-  border:1px solid var(--border-bright);
-  border-radius:var(--r-lg); padding:1rem; margin-bottom:10px;
-  box-shadow:0 0 20px rgba(0,255,65,0.08);
-}
-.sat-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; }
-.sat-card {
-  background:rgba(0,255,65,0.04); border:1px solid var(--border);
-  border-radius:var(--r-md); padding:8px; transition:all 0.25s;
-}
-.sat-card:hover { background:rgba(0,255,65,0.08); border-color:var(--green); box-shadow:0 0 10px rgba(0,255,65,0.15); }
-.sat-label { font-size:9px; color:var(--text-faint); margin-bottom:3px; font-family:var(--font-mono); text-transform:uppercase; letter-spacing:0.8px; }
-.sat-val { font-size:15px; font-weight:700; color:var(--green); font-family:var(--font-mono); text-shadow:0 0 8px rgba(0,255,65,0.5); animation:neonPulse 2s ease-in-out infinite; }
-.sat-sub { font-size:9px; color:var(--text-faint); font-family:var(--font-mono); }
-.sat-orbit { position:relative; width:160px; height:160px; margin:0 auto 14px; }
-.orbit-earth {
-  width:46px; height:46px; border-radius:50%;
-  background:radial-gradient(circle at 40% 40%,#1a4a1a,#0a2a0a);
-  border:2px solid var(--green);
-  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
-  display:flex; align-items:center; justify-content:center; font-size:18px;
-  box-shadow:0 0 15px rgba(0,255,65,0.4), inset 0 0 10px rgba(0,255,65,0.1);
-}
-.orbit-ring { position:absolute; border-radius:50%; border:1px solid rgba(0,255,65,0.15); top:50%; left:50%; transform:translate(-50%,-50%); }
-.orbit-sat {
-  position:absolute; width:14px; height:14px; border-radius:50%;
-  background:var(--green); top:50%; left:50%;
-  font-size:7px; display:flex; align-items:center; justify-content:center;
-  color:#000; font-weight:700; font-family:var(--font-mono);
-  box-shadow:0 0 8px var(--green), 0 0 16px rgba(0,255,65,0.5);
-}
-.qr-connect {
-  background:rgba(0,12,2,0.9); border:1px solid var(--border-bright);
-  border-radius:var(--r-lg); padding:1rem; margin-bottom:10px;
-  display:flex; gap:14px; align-items:center;
-}
-.qr-svg-w { width:60px; height:60px; flex-shrink:0; filter:drop-shadow(0 0 8px rgba(0,255,65,0.5)); }
-.qr-info h3 { font-size:12px; font-weight:700; color:var(--green); margin-bottom:4px; font-family:var(--font-mono); text-transform:uppercase; }
-.qr-info p { font-size:10px; color:var(--text-dim); line-height:1.7; font-family:var(--font-mono); }
-.signal-bars { display:flex; align-items:flex-end; gap:2px; height:16px; }
-.signal-bars span { width:4px; border-radius:1px; background:var(--green); box-shadow:0 0 4px rgba(0,255,65,0.5); }
-
-/* ══ HOSPITAL CARDS ══ */
-.hosp-card {
-  border:1px solid var(--border); border-radius:var(--r-md);
-  padding:10px; margin-bottom:8px; background:rgba(0,10,2,0.9);
-  transition:all 0.25s;
-}
-.hosp-card:hover { border-color:var(--green); box-shadow:0 0 10px rgba(0,255,65,0.1); }
-.hc-head { display:flex; align-items:center; gap:8px; margin-bottom:6px; }
-.hc-av { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; font-family:var(--font-mono); border:1px solid var(--border); }
-.hc-name { font-size:12px; font-weight:600; color:var(--green); font-family:var(--font-mono); }
-.hc-dist { font-size:10px; color:var(--text-dim); font-family:var(--font-mono); }
-.hc-tags { display:flex; gap:4px; flex-wrap:wrap; margin-bottom:6px; }
-.hc-tag { font-size:9px; padding:2px 6px; border-radius:3px; background:rgba(0,255,65,0.07); color:var(--green); border:1px solid rgba(0,255,65,0.2); font-family:var(--font-mono); }
-.hc-row { display:flex; justify-content:space-between; font-size:11px; padding:2px 0; color:var(--text-dim); font-family:var(--font-mono); }
-.hc-row span:last-child { color:var(--green); }
-
-/* ══ EMERGENCY STRIP ══ */
-.emer-strip {
-  background:rgba(15,0,5,0.95);
-  border:1px solid rgba(255,0,60,0.4); border-radius:var(--r-md);
-  padding:12px 14px; margin-bottom:10px;
-  box-shadow:0 0 20px rgba(255,0,60,0.1);
-  position:relative; overflow:hidden;
-}
-.emer-strip::after { content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 50%,rgba(255,0,60,0.05),transparent 70%); animation:pulse 2s infinite; }
-.emer-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-.emer-item {
-  text-align:center; padding:8px; border-radius:var(--r-md);
-  border:1px solid rgba(255,0,60,0.2); background:rgba(255,0,60,0.05);
-  cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden;
-}
-.emer-item:hover { background:rgba(255,0,60,0.15); border-color:rgba(255,0,60,0.6); transform:scale(1.05); }
-.emer-item::after { content:''; position:absolute; top:50%; left:50%; width:0; height:0; background:rgba(255,0,60,0.3); border-radius:50%; transform:translate(-50%,-50%); transition:0.4s; }
-.emer-item:active::after { width:200px; height:200px; opacity:0; }
-.emer-num { font-size:22px; font-weight:700; color:#ff003c; font-family:var(--font-mono); text-shadow:0 0 10px rgba(255,0,60,0.6); }
-.emer-lbl { font-size:9px; color:rgba(255,100,100,0.8); font-family:var(--font-mono); text-transform:uppercase; letter-spacing:0.5px; }
-
-/* ══ ANNOUNCEMENTS ══ */
-.ann-item { padding:8px 0; border-bottom:1px solid rgba(0,255,65,0.08); transition:all 0.2s; cursor:default; }
-.ann-item:last-child { border-bottom:none; }
-.ann-item:hover { background:rgba(0,255,65,0.03); padding-left:6px; }
-.ann-tag { display:inline-block; font-size:9px; padding:2px 7px; border-radius:3px; margin-bottom:4px; background:rgba(0,255,65,0.1); color:var(--green); border:1px solid rgba(0,255,65,0.3); font-family:var(--font-mono); text-transform:uppercase; letter-spacing:0.5px; }
-.ann-text { font-size:12px; color:rgba(0,255,65,0.85); line-height:1.6; font-family:var(--font-mono); }
-.ann-date { font-size:10px; color:var(--text-faint); margin-top:2px; font-family:var(--font-mono); }
-
-/* ══ COMPLAINT FORM ══ */
-.complaint-form { display:flex; flex-direction:column; gap:10px; }
-.complaint-form select,
-.complaint-form textarea,
-.complaint-form input {
-  width:100%; font-size:12px; font-family:var(--font-mono);
-  background:rgba(0,10,2,0.95); color:var(--green);
-  border:1px solid rgba(0,255,65,0.3); border-radius:var(--r-md);
-  padding:8px 12px; outline:none; transition:all 0.2s;
-}
-.complaint-form select:focus,
-.complaint-form textarea:focus,
-.complaint-form input:focus {
-  border-color:var(--green); box-shadow:0 0 10px rgba(0,255,65,0.2);
-}
-.complaint-form textarea { height:80px; resize:vertical; }
-.complaint-form select option { background:#000c02; }
-.sub-btn {
-  padding:10px 20px; background:rgba(0,255,65,0.12); color:var(--green);
-  border:1px solid var(--green); border-radius:var(--r-md);
-  font-size:12px; cursor:pointer; font-weight:700; font-family:var(--font-mono);
-  text-transform:uppercase; letter-spacing:1px; transition:all 0.2s;
-}
-.sub-btn:hover { background:rgba(0,255,65,0.2); box-shadow:0 0 15px rgba(0,255,65,0.3); transform:translateY(-1px); }
-.smsg {
-  background:rgba(0,30,6,0.95); border:1px solid var(--green);
-  border-radius:var(--r-md); padding:10px 14px; font-size:11px;
-  color:var(--green); display:none; font-family:var(--font-mono);
-  animation:fadeSlideUp 0.4s ease;
-}
-
-/* ══ WEATHER ══ */
-.weather-big { font-size:46px; font-weight:700; color:var(--green); font-family:var(--font-mono); text-shadow:0 0 20px rgba(0,255,65,0.5); animation:neonPulse 3s ease-in-out infinite; }
-.prog-bar2 { height:6px; background:linear-gradient(to right,var(--green),var(--amber),#ff6600,var(--red-hack)); border-radius:3px; position:relative; margin:6px 0; box-shadow:0 0 8px rgba(0,255,65,0.3); }
-.prog-marker { position:absolute; top:-5px; width:14px; height:14px; border-radius:50%; background:#000; border:2px solid var(--amber); box-shadow:0 0 8px rgba(255,183,0,0.5); }
-
-/* ══ WIFI ══ */
-.wifi-z {
-  background:rgba(0,15,3,0.9); border:1px solid var(--border);
-  border-radius:var(--r-md); padding:10px 14px; display:flex;
-  align-items:center; gap:10px; margin-bottom:8px; transition:all 0.25s;
-}
-.wifi-z:hover { border-color:var(--green); box-shadow:0 0 10px rgba(0,255,65,0.1); }
-.wifi-z i { font-size:18px; color:var(--green); }
-.wifi-name { font-size:12px; font-weight:700; color:var(--green); font-family:var(--font-mono); }
-.wifi-info { font-size:10px; color:var(--text-dim); font-family:var(--font-mono); }
-
-/* ══ TOURISM ══ */
-.tour-c {
-  border:1px solid var(--border); border-radius:var(--r-md);
-  padding:10px; margin-bottom:8px; display:flex; gap:10px;
-  background:rgba(0,10,2,0.9); transition:all 0.25s; cursor:pointer;
-}
-.tour-c:hover { border-color:var(--green); transform:translateX(6px); box-shadow:4px 0 0 var(--green); }
-.tour-ic { width:38px; height:38px; border-radius:var(--r-md); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; border:1px solid var(--border); background:rgba(0,255,65,0.05); }
-.tour-name { font-size:12px; font-weight:700; color:var(--green); font-family:var(--font-mono); }
-.tour-desc { font-size:10px; color:var(--text-dim); line-height:1.6; margin-top:2px; font-family:var(--font-mono); }
-.tour-tags { display:flex; gap:5px; margin-top:5px; flex-wrap:wrap; }
-.tour-tag { font-size:9px; padding:2px 6px; border-radius:3px; background:rgba(0,255,65,0.07); color:var(--text-dim); border:1px solid var(--border); font-family:var(--font-mono); }
-
-/* ══ SCROLLBAR ══ */
-::-webkit-scrollbar { width:4px; }
-::-webkit-scrollbar-track { background:transparent; }
-::-webkit-scrollbar-thumb { background:rgba(0,255,65,0.4); border-radius:4px; }
-
-/* ══ SR ONLY ══ */
-.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
-
-/* ══ MATRIX WATERFALL (data stream) ══ */
-@keyframes dataFall { 0%{top:-30px;opacity:0} 5%{opacity:0.9} 90%{opacity:0.6} 100%{top:110%;opacity:0} }
-.data-drop { position:absolute; font-family:var(--font-mono); font-size:10px; color:var(--green); pointer-events:none; animation:dataFall linear infinite; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart City QR Pole · Satellite Command · Tamil Nadu & Puducherry</title>
+  <meta name="description" content="Smart City QR Pole – satellite-connected live tracking system covering 5000+ cities across Tamil Nadu, Puducherry, and South India">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --border-radius-lg: 12px;
+      --border-radius-md: 8px;
+      --color-background-primary: #ffffff;
+      --color-background-secondary: #f5f5f5;
+      --color-background-info: #dbeafe;
+      --color-background-success: #dcfce7;
+      --color-background-warning: #fef9c3;
+      --color-background-danger: #fee2e2;
+      --color-border-secondary: #d1d5db;
+      --color-border-tertiary: #e5e7eb;
+      --color-text-primary: #111827;
+      --color-text-secondary: #6b7280;
+      --color-text-info: #1d4ed8;
+      --color-text-success: #15803d;
+      --color-text-warning: #a16207;
+      --color-text-danger: #b91c1c;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: #f0f4f8;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .complaint-form select,
+    .complaint-form textarea,
+    .complaint-form input {
+      padding: 6px 10px;
+      border: 0.5px solid var(--color-border-secondary);
+      border-radius: var(--border-radius-md);
+      font-family: var(--font-sans);
+    }
+    .sub-btn:hover { background: #1a6bbf; }
+    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+    .city-grid { max-height: 300px; overflow-y: auto; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 8px; margin-top: 8px; }
+    .city-tag { display: inline-block; padding: 2px 8px; background: var(--color-background-primary); border-radius: 12px; font-size: 10px; margin: 2px; border: 0.5px solid var(--color-border-tertiary); }
+    .map-container { position: relative; background: #e8f4f8; border-radius: var(--border-radius-lg); overflow: hidden; }
+    .custom-map { width: 100%; height: 400px; background: linear-gradient(135deg, #c8e6f0 0%, #a8d5e5 100%); position: relative; }
+    .city-marker { position: absolute; width: 8px; height: 8px; background: #185FA5; border-radius: 50%; cursor: pointer; transition: all 0.2s; }
+    .city-marker:hover { transform: scale(2); background: #A32D2D; }
+    .city-label { position: absolute; font-size: 8px; background: rgba(5,14,31,0.7); color: white; padding: 1px 4px; border-radius: 3px; white-space: nowrap; }
+  </style>
 </head>
 <body>
-<canvas id="matrix-canvas"></canvas>
 
-<div class="app">
-<h2 class="sr-only">Smart City QR Pole Satellite Command Chittoor</h2>
+<div class="app" style="max-width: 780px;">
+<h2 class="sr-only">Smart City QR Pole – satellite-connected live tracking system covering 5000+ cities across Tamil Nadu, Puducherry, and South India</h2>
 
-<!-- ══ HEADER ══ -->
 <div class="hdr">
   <div class="hdr-top">
-    <div class="sat-ring"><i class="ti ti-antenna"></i></div>
+    <div class="sat-ring"><i class="ti ti-antenna" aria-hidden="true"></i></div>
     <div>
-      <h1><span class="glitch-wrap" data-text="SMART CITY QR POLE · SATELLITE COMMAND">SMART CITY QR POLE · SATELLITE COMMAND</span></h1>
-      <p id="hs">> ISRO NavIC + GPS · CONNECTED · ALL INDIA COVERAGE · POLE: CIT-QR-0042 · IST <span id="liveclock">--:--:--</span></p>
+      <h1 id="ht">Smart City QR Pole · Satellite Command</h1>
+      <p id="hs">ISRO NavIC + GPS · Connected · Tamil Nadu & Puducherry Coverage · Pole ID: TN-MAIN-0001</p>
     </div>
   </div>
   <div class="sat-status">
-    <div class="sstat"><div class="sstat-dot pulse" style="background:#00ff41"></div><span id="ss1">NavIC satellite: LIVE</span></div>
-    <div class="sstat"><div class="sstat-dot pulse" style="background:#00ffe5"></div><span id="ss2">GPS lock: 12 sats</span></div>
-    <div class="sstat"><div class="sstat-dot pulse" style="background:#ffb700"></div><span id="ss3">Signal: 98.4%</span></div>
-    <div class="sstat"><div class="sstat-dot" style="background:#00ff41"></div><span id="ss4">Last sync: 2s ago</span></div>
+    <div class="sstat"><div class="sstat-dot pulse" style="background:#639922"></div><span id="ss1">NavIC satellite: LIVE</span></div>
+    <div class="sstat"><div class="sstat-dot pulse" style="background:#378ADD"></div><span id="ss2">GPS lock: 14 sats</span></div>
+    <div class="sstat"><div class="sstat-dot pulse" style="background:#EF9F27"></div><span id="ss3">Signal: 98.7%</span></div>
+    <div class="sstat"><div class="sstat-dot" style="background:#5DCAA5"></div><span id="ss4">Last sync: 1s ago</span></div>
   </div>
   <div class="lang-row">
     <button class="lb on" onclick="setL('en',this)">🇬🇧 EN</button>
-    <button class="lb" onclick="setL('hi',this)">🇮🇳 HI</button>
-    <button class="lb" onclick="setL('te',this)">🏵 TE</button>
-    <button class="lb" onclick="setL('ta',this)">🌺 TA</button>
-    <button class="lb" onclick="setL('bn',this)">🐟 BN</button>
-    <button class="lb" onclick="setL('mr',this)">🦋 MR</button>
+    <button class="lb" onclick="setL('ta',this)">🌺 தமிழ்</button>
+    <button class="lb" onclick="setL('hi',this)">🇮🇳 हिंदी</button>
     <button class="lb" onclick="setL('fr',this)">🇫🇷 FR</button>
-    <button class="lb" onclick="setL('de',this)">🇩🇪 DE</button>
-    <button class="lb" onclick="setL('zh',this)">🇨🇳 ZH</button>
-    <button class="lb" onclick="setL('ja',this)">🇯🇵 JP</button>
-    <button class="lb" onclick="setL('ar',this)">🇸🇦 AR</button>
   </div>
 </div>
 
-<!-- ══ BOOT TERMINAL ══ -->
-<div class="boot-banner">
-  <div class="boot-line t1">> SYSTEM BOOT... NavIC uplink established. 12/12 satellites locked.</div>
-  <div class="boot-line t2">> GPS accuracy ±1.2m · Data uplink 124 Mbps Ku-band · IoT sensors: 24 active</div>
-  <div class="boot-line t3">> CHITTOOR NODE CIT-QR-0042 online. All services nominal. <span class="cursor">█</span></div>
-</div>
-
-<!-- ══ LIVE TICKER ══ -->
 <div class="live-ticker" id="ticker">
   <div class="ticker-inner" id="tickerInner"></div>
 </div>
 
-<!-- ══ NAV ══ -->
 <div class="nav">
-  <button class="nb on" onclick="showP('map',this)"><i class="ti ti-map-2"></i><span id="n1">India Map</span></button>
+  <button class="nb on" onclick="showP('map',this)"><i class="ti ti-map-2"></i><span id="n1">Cities Map</span></button>
   <button class="nb" onclick="showP('bus',this)"><i class="ti ti-bus"></i><span id="n2">Bus Track</span></button>
   <button class="nb" onclick="showP('train',this)"><i class="ti ti-train"></i><span id="n3">Trains</span></button>
   <button class="nb" onclick="showP('hospital',this)"><i class="ti ti-building-hospital"></i><span id="n4">Hospitals</span></button>
@@ -609,653 +94,279 @@ body::before {
   <button class="nb" onclick="showP('satellite',this)"><i class="ti ti-antenna"></i><span id="n6">Satellite</span></button>
   <button class="nb" onclick="showP('weather',this)"><i class="ti ti-cloud"></i><span id="n7">Weather</span></button>
   <button class="nb" onclick="showP('tourism',this)"><i class="ti ti-camera"></i><span id="n8">Tourism</span></button>
-  <button class="nb" onclick="showP('wifi',this)"><i class="ti ti-wifi"></i><span id="n9">Wi-Fi</span></button>
+  <button class="nb" onclick="showP('cities',this)"><i class="ti ti-building"></i><span id="n12">5000+ Cities</span></button>
   <button class="nb" onclick="showP('announce',this)"><i class="ti ti-speakerphone"></i><span id="n10">Alerts</span></button>
   <button class="nb" onclick="showP('complaint',this)"><i class="ti ti-message-circle"></i><span id="n11">Complaint</span></button>
 </div>
 
-<!-- nav scroll hint -->
-<div id="nav-hint" style="font-size:9px;color:var(--text-faint);font-family:var(--font-mono);margin:-6px 0 8px 2px;display:none">scroll → to see all tabs</div>
-
-<!-- ══ PANEL: MAP ══ -->
+<!-- Cities Map Panel -->
 <div id="p-map" class="panel on">
-  <div class="india-map">
-    <svg class="imap-svg" viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg" id="indiasvg">
-      <rect width="500" height="380" fill="#000c02"/>
-      <polygon points="120,30 160,20 200,25 240,18 280,22 310,15 340,28 360,45 370,70 380,95 385,120 375,145 360,165 340,180 320,195 300,210 280,230 270,255 265,275 260,295 255,310 250,325 240,340 230,355 220,365 215,370 210,365 205,355 195,340 185,325 178,310 172,295 165,275 158,255 150,235 140,215 125,195 110,175 95,155 82,135 75,115 72,90 78,65 95,45 120,30" fill="#001a04" stroke="#00ff41" stroke-width="1"/>
-      <polygon points="340,28 360,45 370,70 380,95 385,120 370,125 355,115 340,100 320,90 300,80 285,70 280,55 290,40 310,30" fill="#001205" stroke="#00cc33" stroke-width="0.8"/>
-      <line x1="215" y1="370" x2="210" y2="340" stroke="#00ff41" stroke-width="6" stroke-linecap="round" opacity="0.4"/>
-
-      <text x="130" y="75"  font-size="8" fill="#00ff41" font-family="Courier New" opacity="0.8">Delhi</text>
-      <text x="290" y="110" font-size="8" fill="#00ff41" font-family="Courier New" opacity="0.8">Kolkata</text>
-      <text x="175" y="200" font-size="8" fill="#00ff41" font-family="Courier New" opacity="0.8">Mumbai</text>
-      <text x="265" y="213" font-size="8" fill="#00ff41" font-family="Courier New" opacity="0.8">Hyderabad</text>
-      <text x="255" y="268" font-size="8" fill="#00ff41" font-family="Courier New" opacity="0.8">Bengaluru</text>
-      <text x="283" y="303" font-size="8" fill="#00ff41" font-family="Courier New" opacity="0.8">Chennai</text>
-      <text x="145" y="115" font-size="8" fill="#00ff41" font-family="Courier New" opacity="0.7">Jaipur</text>
-      <text x="192" y="152" font-size="8" fill="#00ff41" font-family="Courier New" opacity="0.7">Bhopal</text>
-      <text x="337" y="78"  font-size="8" fill="#00ff41" font-family="Courier New" opacity="0.7">Guwahati</text>
-      <text x="230" y="294" font-size="8" fill="#00ffe5" font-family="Courier New" font-weight="bold">Chittoor</text>
-
-      <g id="layer-bus">
-        <line x1="138" y1="72" x2="300" y2="105" stroke="#00ff41" stroke-width="1.5" stroke-dasharray="5,3" class="route-line" opacity="0.6"/>
-        <line x1="138" y1="72" x2="185" y2="195" stroke="#00ff41" stroke-width="1.5" stroke-dasharray="5,3" class="route-line" opacity="0.6"/>
-        <line x1="185" y1="195" x2="280" y2="205" stroke="#00ff41" stroke-width="1.5" stroke-dasharray="5,3" class="route-line" opacity="0.6"/>
-        <line x1="280" y1="205" x2="270" y2="260" stroke="#00ff41" stroke-width="1.5" stroke-dasharray="5,3" class="route-line" opacity="0.6"/>
-        <line x1="270" y1="260" x2="290" y2="295" stroke="#00ff41" stroke-width="1.5" stroke-dasharray="5,3" class="route-line" opacity="0.6"/>
-        <line x1="290" y1="295" x2="255" y2="285" stroke="#00ff41" stroke-width="1.5" stroke-dasharray="5,3" class="route-line" opacity="0.6"/>
-        <line x1="255" y1="285" x2="247" y2="283" stroke="#00ffe5" stroke-width="2" stroke-dasharray="4,2" class="route-line"/>
-        <rect x="162" y="130" width="20" height="10" rx="2" fill="#00ff41" id="busA" opacity="0.9"/>
-        <rect x="225" y="200" width="20" height="10" rx="2" fill="#00cc33" id="busB" opacity="0.9"/>
-        <rect x="270" y="240" width="20" height="10" rx="2" fill="#ffb700" id="busC" opacity="0.9"/>
-      </g>
-      <g id="layer-train">
-        <line x1="138" y1="72" x2="295" y2="108" stroke="#00ffe5" stroke-width="2" stroke-dasharray="8,4" class="route-line" style="display:none"/>
-        <line x1="185" y1="195" x2="290" y2="295" stroke="#00ffe5" stroke-width="2" stroke-dasharray="8,4" class="route-line" style="display:none"/>
-        <line x1="138" y1="72" x2="185" y2="195" stroke="#00ffe5" stroke-width="2" stroke-dasharray="8,4" class="route-line" style="display:none"/>
-        <circle cx="200" cy="155" r="5" fill="#00ffe5" id="trainA" style="display:none"/>
-        <circle cx="238" cy="243" r="5" fill="#00ffe5" id="trainB" style="display:none"/>
-      </g>
-      <g id="layer-flight">
-        <line x1="138" y1="72" x2="290" y2="295" stroke="#cc66ff" stroke-width="1" stroke-dasharray="3,3" class="route-line" style="display:none"/>
-        <line x1="185" y1="195" x2="345" y2="70" stroke="#cc66ff" stroke-width="1" stroke-dasharray="3,3" class="route-line" style="display:none"/>
-        <circle cx="210" cy="180" r="4" fill="#cc66ff" id="flightA" style="display:none"/>
-        <circle cx="262" cy="133" r="4" fill="#cc66ff" id="flightB" style="display:none"/>
-      </g>
-
-      <g class="city-dot" onclick="cityClick('Delhi')"><circle cx="138" cy="72" r="6" fill="#00ff41" opacity="0.8"/></g>
-      <g class="city-dot" onclick="cityClick('Kolkata')"><circle cx="300" cy="105" r="6" fill="#00ff41" opacity="0.8"/></g>
-      <g class="city-dot" onclick="cityClick('Mumbai')"><circle cx="185" cy="195" r="6" fill="#00ff41" opacity="0.8"/></g>
-      <g class="city-dot" onclick="cityClick('Hyderabad')"><circle cx="280" cy="205" r="6" fill="#00ff41" opacity="0.8"/></g>
-      <g class="city-dot" onclick="cityClick('Bengaluru')"><circle cx="270" cy="260" r="6" fill="#00ff41" opacity="0.8"/></g>
-      <g class="city-dot" onclick="cityClick('Chennai')"><circle cx="290" cy="295" r="6" fill="#00ff41" opacity="0.8"/></g>
-      <g class="city-dot" onclick="cityClick('Jaipur')"><circle cx="150" cy="108" r="5" fill="#00ff41" opacity="0.7"/></g>
-      <g class="city-dot" onclick="cityClick('Bhopal')"><circle cx="200" cy="148" r="5" fill="#00ff41" opacity="0.7"/></g>
-      <g class="city-dot" onclick="cityClick('Guwahati')"><circle cx="345" cy="70" r="5" fill="#00ff41" opacity="0.7"/></g>
-      <g class="city-dot" onclick="cityClick('Chittoor')">
-        <circle cx="247" cy="285" r="7" fill="#00ffe5"/>
-        <circle cx="247" cy="285" r="12" fill="none" stroke="#00ffe5" stroke-width="1.5" opacity="0.6"/>
-        <circle cx="247" cy="285" r="18" fill="none" stroke="#00ffe5" stroke-width="0.8" opacity="0.3"/>
-      </g>
-
-      <rect x="6" y="6" width="130" height="14" rx="2" fill="rgba(0,10,2,0.9)"/>
-      <text x="10" y="16" font-size="8" fill="#00ff41" font-family="Courier New">NavIC LIVE · 12 sats locked</text>
-      <rect x="6" y="24" width="60" height="10" rx="2" fill="rgba(0,255,65,0.2)"/>
-      <text x="10" y="31.5" font-size="7" fill="#00ff41" font-family="Courier New">Bus routes</text>
-      <rect x="70" y="24" width="60" height="10" rx="2" fill="rgba(0,255,229,0.2)"/>
-      <text x="74" y="31.5" font-size="7" fill="#00ffe5" font-family="Courier New">Rail routes</text>
-      <rect x="134" y="24" width="60" height="10" rx="2" fill="rgba(204,102,255,0.2)"/>
-      <text x="138" y="31.5" font-size="7" fill="#cc66ff" font-family="Courier New">Flight paths</text>
-    </svg>
+  <div class="map-container">
+    <div class="custom-map" id="citiesMap" style="position: relative;">
+      <!-- Dynamic city markers will be added via JS -->
+    </div>
     <div class="map-ctrl">
-      <button class="mc on" onclick="toggleLayer('bus',this)"><i class="ti ti-bus" style="font-size:11px"></i> BUS</button>
-      <button class="mc" onclick="toggleLayer('train',this)"><i class="ti ti-train" style="font-size:11px"></i> TRAIN</button>
-      <button class="mc" onclick="toggleLayer('flight',this)"><i class="ti ti-plane" style="font-size:11px"></i> FLIGHT</button>
-      <span id="city-info" style="font-size:10px;color:var(--text-dim);margin-left:auto;align-self:center;font-family:var(--font-mono)">// click city for data</span>
+      <button class="mc on" onclick="showAllCities()"><i class="ti ti-map"></i> All Cities</button>
+      <button class="mc" onclick="zoomTamilNadu()"><i class="ti ti-map-pin"></i> Tamil Nadu</button>
+      <button class="mc" onclick="zoomPuducherry()"><i class="ti ti-map-pin"></i> Puducherry</button>
+      <span id="city-info" style="font-size:11px;color:var(--color-text-secondary);margin-left:auto;align-self:center">📍 5,124 cities tracked</span>
     </div>
   </div>
   <div class="g4">
-    <div class="stat"><div class="sl">Active buses</div><div class="sv" id="msv1">1,284</div></div>
-    <div class="stat"><div class="sl">Active trains</div><div class="sv" id="msv2">312</div></div>
-    <div class="stat"><div class="sl">QR poles</div><div class="sv" id="msv3">4,820</div></div>
-    <div class="stat"><div class="sl">Cities</div><div class="sv" id="msv4">286</div></div>
+    <div class="stat"><div class="sl" id="ms1">Active buses</div><div class="sv" id="msv1">5,000+</div></div>
+    <div class="stat"><div class="sl" id="ms2">Active trains</div><div class="sv" id="msv2">1,042</div></div>
+    <div class="stat"><div class="sl" id="ms3">QR poles</div><div class="sv" id="msv3">12,450</div></div>
+    <div class="stat"><div class="sl" id="ms4">Cities covered</div><div class="sv" id="msv4">5,124</div></div>
   </div>
 </div>
 
-<!-- ══ PANEL: BUS ══ -->
+<!-- Bus Panel -->
 <div id="p-bus" class="panel">
   <div class="g3">
-    <div class="stat"><div class="sl">Live routes</div><div class="sv">6</div></div>
-    <div class="stat"><div class="sl">On time</div><div class="sv">83<span class="su">%</span></div></div>
-    <div class="stat"><div class="sl">Avg occupancy</div><div class="sv">61<span class="su">%</span></div></div>
+    <div class="stat"><div class="sl">Live routes</div><div class="sv">247</div></div>
+    <div class="stat"><div class="sl">On time</div><div class="sv">86%</div></div>
+    <div class="stat"><div class="sl">Avg occupancy</div><div class="sv">58%</div></div>
   </div>
   <div class="card">
-    <div class="ct"><i class="ti ti-bus"></i><span id="btt">Live Bus Tracking · Satellite GPS</span></div>
-    <div style="margin-bottom:10px;font-size:10px;color:var(--text-dim);font-family:var(--font-mono)"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#00ff41;animation:pulse 1.2s infinite;margin-right:5px"></span><span id="bls">ISRO NavIC feed · updates every 15s</span></div>
+    <div class="ct"><i class="ti ti-bus"></i><span>Live Bus Tracking · 5,000+ Buses Active</span></div>
+    <div style="margin-bottom:10px;font-size:12px;color:var(--color-text-secondary)"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#639922;animation:pulse 1.5s infinite;margin-right:5px"></span><span>ISRO NavIC feed · updates every 10s · 5,247 buses online</span></div>
     <div id="busListEl"></div>
+    <div style="text-align:center;margin-top:8px"><span class="badge bb">🚍 Total Active Buses: 5,247</span></div>
   </div>
 </div>
 
-<!-- ══ PANEL: TRAIN ══ -->
+<!-- Train Panel -->
 <div id="p-train" class="panel">
   <div class="card">
-    <div class="ct"><i class="ti ti-train"></i><span id="trt">Live Train Status · All India</span></div>
+    <div class="ct"><i class="ti ti-train"></i><span>Live Train Status · 1,042 Trains Active</span></div>
     <div id="trainListEl"></div>
   </div>
   <div class="g3">
-    <div class="stat"><div class="sl">Trains running</div><div class="sv">312</div></div>
-    <div class="stat"><div class="sl">On schedule</div><div class="sv">74<span class="su">%</span></div></div>
-    <div class="stat"><div class="sl">Delayed</div><div class="sv">26<span class="su">%</span></div></div>
+    <div class="stat"><div class="sl">Trains running</div><div class="sv">1,042</div></div>
+    <div class="stat"><div class="sl">On schedule</div><div class="sv">78%</div></div>
+    <div class="stat"><div class="sl">Delayed</div><div class="sv">22%</div></div>
   </div>
 </div>
 
-<!-- ══ PANEL: HOSPITAL ══ -->
+<!-- Hospitals Panel -->
 <div id="p-hospital" class="panel">
   <div class="g3">
-    <div class="stat"><div class="sl">Total hospitals</div><div class="sv">6</div></div>
-    <div class="stat"><div class="sl">Beds available</div><div class="sv">218</div></div>
-    <div class="stat"><div class="sl">Ambulances</div><div class="sv">12</div></div>
+    <div class="stat"><div class="sl">Total hospitals</div><div class="sv">847</div></div>
+    <div class="stat"><div class="sl">Beds available</div><div class="sv">12,418</div></div>
+    <div class="stat"><div class="sl">Ambulances</div><div class="sv">324</div></div>
   </div>
-  <div class="card">
-    <div class="ct"><i class="ti ti-building-hospital"></i><span id="hpt">Nearby Hospitals · Live Bed Status</span></div>
-    <div id="hospListEl"></div>
-  </div>
+  <div class="card"><div class="ct"><i class="ti ti-building-hospital"></i><span>Hospitals Across TN & Puducherry</span></div><div id="hospListEl"></div></div>
 </div>
 
-<!-- ══ PANEL: EMERGENCY ══ -->
+<!-- Emergency Panel -->
 <div id="p-emergency" class="panel">
   <div class="emer-strip">
-    <div style="font-size:11px;font-weight:700;color:#ff003c;margin-bottom:10px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:2px;text-shadow:0 0 10px rgba(255,0,60,0.6)" id="eht">!! EMERGENCY HELPLINES · INDIA !!</div>
+    <div style="font-size:12px;font-weight:500;color:#501313;margin-bottom:8px">Emergency Helplines · Tamil Nadu & India</div>
     <div class="emer-grid">
-      <div class="emer-item"><div class="emer-num">100</div><div class="emer-lbl" id="e1l">Police</div></div>
-      <div class="emer-item"><div class="emer-num">108</div><div class="emer-lbl" id="e2l">Ambulance</div></div>
-      <div class="emer-item"><div class="emer-num">101</div><div class="emer-lbl" id="e3l">Fire</div></div>
-      <div class="emer-item"><div class="emer-num">1091</div><div class="emer-lbl" id="e4l">Women</div></div>
-      <div class="emer-item"><div class="emer-num">1098</div><div class="emer-lbl" id="e5l">Child</div></div>
-      <div class="emer-item"><div class="emer-num">1077</div><div class="emer-lbl" id="e6l">Disaster</div></div>
-      <div class="emer-item"><div class="emer-num">102</div><div class="emer-lbl" id="e7l">Maternity</div></div>
-      <div class="emer-item"><div class="emer-num">1800</div><div class="emer-lbl" id="e8l">Poison</div></div>
-      <div class="emer-item"><div class="emer-num">112</div><div class="emer-lbl" id="e9l">All Emergencies</div></div>
+      <div class="emer-item"><div class="emer-num">100</div><div class="emer-lbl">Police</div></div>
+      <div class="emer-item"><div class="emer-num">108</div><div class="emer-lbl">Ambulance</div></div>
+      <div class="emer-item"><div class="emer-num">101</div><div class="emer-lbl">Fire</div></div>
+      <div class="emer-item"><div class="emer-num">1091</div><div class="emer-lbl">Women</div></div>
+      <div class="emer-item"><div class="emer-num">1098</div><div class="emer-lbl">Child</div></div>
+      <div class="emer-item"><div class="emer-num">1077</div><div class="emer-lbl">Disaster</div></div>
+      <div class="emer-item"><div class="emer-num">102</div><div class="emer-lbl">Maternity</div></div>
+      <div class="emer-item"><div class="emer-num">112</div><div class="emer-lbl">All Emergencies</div></div>
     </div>
-  </div>
-  <div class="card">
-    <div class="ct"><i class="ti ti-map-pin"></i><span id="enl">Nearest Services · GPS Located</span></div>
-    <div class="row"><div style="width:8px;height:8px;border-radius:50%;background:#ff003c;margin-right:10px;box-shadow:0 0 6px rgba(255,0,60,0.6)"></div><div style="flex:1"><div style="font-size:12px;color:var(--green);font-family:var(--font-mono)" id="es1">Chittoor Police Station</div><div style="font-size:10px;color:var(--text-dim);font-family:var(--font-mono)">0.4 km · 24/7 · 08572-224433</div></div><span class="badge rb">Active</span></div>
-    <div class="row"><div style="width:8px;height:8px;border-radius:50%;background:#ff003c;margin-right:10px;box-shadow:0 0 6px rgba(255,0,60,0.6)"></div><div style="flex:1"><div style="font-size:12px;color:var(--green);font-family:var(--font-mono)" id="es2">City Hospital Emergency</div><div style="font-size:10px;color:var(--text-dim);font-family:var(--font-mono)">0.3 km · 24/7 · 08572-234567</div></div><span class="badge gb">Ready</span></div>
-    <div class="row"><div style="width:8px;height:8px;border-radius:50%;background:#ffb700;margin-right:10px;box-shadow:0 0 6px rgba(255,183,0,0.5)"></div><div style="flex:1"><div style="font-size:12px;color:var(--green);font-family:var(--font-mono)" id="es3">Fire & Rescue Station</div><div style="font-size:10px;color:var(--text-dim);font-family:var(--font-mono)">1.2 km · 24/7</div></div><span class="badge gb">Ready</span></div>
-    <div class="row"><div style="width:8px;height:8px;border-radius:50%;background:#00ffe5;margin-right:10px;box-shadow:0 0 6px rgba(0,255,229,0.5)"></div><div style="flex:1"><div style="font-size:12px;color:var(--green);font-family:var(--font-mono)" id="es4">108 Ambulance Hub</div><div style="font-size:10px;color:var(--text-dim);font-family:var(--font-mono)">0.8 km · 2 units standby</div></div><span class="badge tb">Standby</span></div>
-    <div class="row"><div style="width:8px;height:8px;border-radius:50%;background:#00ff41;margin-right:10px;box-shadow:0 0 6px rgba(0,255,65,0.6)"></div><div style="flex:1"><div style="font-size:12px;color:var(--green);font-family:var(--font-mono)" id="es5">Traffic Control Point</div><div style="font-size:10px;color:var(--text-dim);font-family:var(--font-mono)">0.2 km · CCTV monitored</div></div><span class="badge gb">Active</span></div>
-  </div>
-  <div class="card">
-    <div class="ct"><i class="ti ti-first-aid-kit"></i><span id="fat">First Aid · Satellite SOS</span></div>
-    <div style="font-size:11px;color:var(--text-dim);line-height:1.9;font-family:var(--font-mono)" id="fad">> SOS on this pole alerts nearest service via satellite<br>> Stay calm · Call 112 · Do not move injured<br>> CPR: 30 compressions + 2 breaths<br>> Burns: cool water 10min · Choking: back blows</div>
   </div>
 </div>
 
-<!-- ══ PANEL: SATELLITE ══ -->
+<!-- Satellite Panel -->
 <div id="p-satellite" class="panel">
   <div class="sat-panel">
-    <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:12px;display:flex;align-items:center;gap:8px;font-family:var(--font-mono);text-transform:uppercase;letter-spacing:1px">
-      <i class="ti ti-antenna" style="font-size:16px;animation:neonPulse 2s infinite"></i>
-      <span id="satHead">Satellite Connection · ISRO NavIC</span>
-    </div>
-    <div class="sat-orbit">
-      <div class="orbit-ring" style="width:62px;height:62px"></div>
-      <div class="orbit-ring" style="width:92px;height:92px"></div>
-      <div class="orbit-ring" style="width:122px;height:122px"></div>
-      <div class="orbit-earth">🌏</div>
-      <div class="orbit-sat" id="os1">S</div>
-      <div class="orbit-sat" id="os2">S</div>
-      <div class="orbit-sat" id="os3">S</div>
-      <div class="orbit-sat" id="os4">S</div>
-    </div>
+    <div style="font-size:13px;font-weight:500;color:#85B7EB;margin-bottom:12px"><i class="ti ti-antenna"></i> Satellite Connection · ISRO NavIC</div>
     <div class="sat-grid">
-      <div class="sat-card"><div class="sat-label">Satellites locked</div><div class="sat-val">12</div><div class="sat-sub">NavIC + GPS</div></div>
-      <div class="sat-card"><div class="sat-label">Signal strength</div><div class="sat-val" id="sigVal">98.4%</div><div class="sat-sub">Excellent</div></div>
-      <div class="sat-card"><div class="sat-label">Location accuracy</div><div class="sat-val">±1.2m</div><div class="sat-sub">Sub-meter</div></div>
-      <div class="sat-card"><div class="sat-label">Data uplink</div><div class="sat-val" id="uplinkVal">124 Mbps</div><div class="sat-sub">Ku-band</div></div>
-      <div class="sat-card"><div class="sat-label">Latitude</div><div class="sat-val">13.21°N</div><div class="sat-sub">Chittoor</div></div>
-      <div class="sat-card"><div class="sat-label">Longitude</div><div class="sat-val">79.10°E</div><div class="sat-sub">IST +5:30</div></div>
+      <div class="sat-card"><div class="sat-label">Satellites locked</div><div class="sat-val">14</div><div class="sat-sub">NavIC + GPS</div></div>
+      <div class="sat-card"><div class="sat-label">Signal strength</div><div class="sat-val" id="sigVal">98.7%</div><div class="sat-sub">Excellent</div></div>
+      <div class="sat-card"><div class="sat-label">Location accuracy</div><div class="sat-val">±0.8m</div><div class="sat-sub">Sub-meter</div></div>
+      <div class="sat-card"><div class="sat-label">Data uplink</div><div class="sat-val" id="uplinkVal">156 Mbps</div><div class="sat-sub">Ku-band</div></div>
+      <div class="sat-card"><div class="sat-label">Latitude</div><div class="sat-val">10.79°N</div><div class="sat-sub">Chennai</div></div>
+      <div class="sat-card"><div class="sat-label">Longitude</div><div class="sat-val">79.14°E</div><div class="sat-sub">IST +5:30</div></div>
     </div>
-    <div style="font-size:10px;color:var(--text-faint);margin-top:6px;font-family:var(--font-mono)" id="satFeat">> SOS beacon · Live tracking · Weather feed · Emergency broadcast · QR sync · IoT data · CCTV relay</div>
   </div>
   <div class="qr-connect">
-    <svg class="qr-svg-w" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-      <rect width="80" height="80" fill="#000c02" rx="4"/>
-      <rect x="8" y="8" width="24" height="24" fill="none" stroke="#00ff41" stroke-width="2.5" rx="2"/>
-      <rect x="13" y="13" width="14" height="14" fill="#00ff41" rx="1"/>
-      <rect x="48" y="8" width="24" height="24" fill="none" stroke="#00ff41" stroke-width="2.5" rx="2"/>
-      <rect x="53" y="13" width="14" height="14" fill="#00ff41" rx="1"/>
-      <rect x="8" y="48" width="24" height="24" fill="none" stroke="#00ff41" stroke-width="2.5" rx="2"/>
-      <rect x="13" y="53" width="14" height="14" fill="#00ff41" rx="1"/>
-      <rect x="48" y="48" width="6" height="6" fill="#00ff41" rx="1"/>
-      <rect x="58" y="48" width="6" height="6" fill="#00ff41" rx="1"/>
-      <rect x="48" y="58" width="6" height="6" fill="#00ff41" rx="1"/>
-      <rect x="58" y="58" width="6" height="6" fill="#00ff41" rx="1"/>
-      <rect x="36" y="8" width="6" height="6" fill="#00ff41" rx="1"/>
-      <rect x="36" y="18" width="6" height="6" fill="#00ff41" rx="1"/>
-      <rect x="8" y="36" width="6" height="6" fill="#00ff41" rx="1"/>
-      <rect x="18" y="36" width="6" height="6" fill="#00ff41" rx="1"/>
-      <rect x="36" y="36" width="6" height="6" fill="#00ff41" rx="1"/>
-    </svg>
-    <div class="qr-info">
-      <h3 id="qrh">>> QR → SATELLITE CONNECTION</h3>
-      <p id="qrp">Scanning this QR syncs your device to the pole's satellite uplink. Real-time GPS tracking, emergency SOS, live bus/train feeds — even offline via NavIC.</p>
-    </div>
-  </div>
-  <div class="g3">
-    <div class="stat"><div class="sl">IoT sensors</div><div class="sv">24</div><div class="su">on this pole</div></div>
-    <div class="stat"><div class="sl">CCTV feeds</div><div class="sv">6</div><div class="su">live streams</div></div>
-    <div class="stat"><div class="sl">Uptime</div><div class="sv">99.7<span class="su">%</span></div><div class="su">this month</div></div>
+    <div class="qr-info"><h3>QR → Satellite Connection</h3><p>Scanning this QR code syncs your phone to the pole's satellite uplink for real-time tracking across all 5,124 cities.</p></div>
   </div>
 </div>
 
-<!-- ══ PANEL: WEATHER ══ -->
+<!-- Weather Panel -->
 <div id="p-weather" class="panel">
   <div class="g2">
-    <div class="card">
-      <div class="ct"><i class="ti ti-thermometer"></i><span id="wt1">Temperature</span></div>
-      <div class="weather-big">32°C</div>
-      <div style="font-size:12px;color:var(--text-dim);margin-top:4px;font-family:var(--font-mono)" id="wdesc">> Partly Cloudy</div>
-      <div style="font-size:11px;color:var(--text-dim);margin-top:6px;font-family:var(--font-mono)" id="wfeels">Feels like 36°C · Humidity 68%</div>
-    </div>
-    <div class="card">
-      <div class="ct"><i class="ti ti-leaf"></i><span id="wt2">Air Quality</span></div>
-      <div style="font-size:40px;font-weight:700;color:var(--amber);font-family:var(--font-mono);text-shadow:0 0 15px rgba(255,183,0,0.5)">87</div>
-      <div class="prog-bar2"><div class="prog-marker" style="left:22%"></div></div>
-      <div style="font-size:11px;font-weight:700;color:var(--amber);font-family:var(--font-mono)" id="aqil">Moderate · Wear mask outdoors</div>
-    </div>
-  </div>
-  <div class="g3">
-    <div class="stat"><div class="sl">Wind</div><div class="sv">14<span class="su"> km/h</span></div></div>
-    <div class="stat"><div class="sl">UV Index</div><div class="sv">8<span class="su">/11</span></div></div>
-    <div class="stat"><div class="sl">Visibility</div><div class="sv">7<span class="su"> km</span></div></div>
-    <div class="stat"><div class="sl">Rain chance</div><div class="sv">22<span class="su">%</span></div></div>
-    <div class="stat"><div class="sl">Sunrise</div><div class="sv" style="font-size:16px">05:58</div></div>
-    <div class="stat"><div class="sl">Sunset</div><div class="sv" style="font-size:16px">18:34</div></div>
-  </div>
-  <div class="card">
-    <div class="ct"><i class="ti ti-calendar"></i><span id="wfc">5-Day Satellite Forecast</span></div>
-    <div class="row"><span style="font-size:12px;color:var(--green);width:80px;font-family:var(--font-mono)" id="wd1">Today</span><span style="font-size:12px;flex:1;color:var(--text-dim);font-family:var(--font-mono)">⛅ Partly cloudy</span><span style="font-size:12px;font-weight:700;color:var(--green);font-family:var(--font-mono)">28–35°C</span></div>
-    <div class="row"><span style="font-size:12px;color:var(--green);width:80px;font-family:var(--font-mono)" id="wd2">Tomorrow</span><span style="font-size:12px;flex:1;color:var(--text-dim);font-family:var(--font-mono)">🌧 Light rain</span><span style="font-size:12px;font-weight:700;color:var(--green);font-family:var(--font-mono)">25–31°C</span></div>
-    <div class="row"><span style="font-size:12px;color:var(--green);width:80px;font-family:var(--font-mono)" id="wd3">Day 3</span><span style="font-size:12px;flex:1;color:var(--text-dim);font-family:var(--font-mono)">☀ Sunny</span><span style="font-size:12px;font-weight:700;color:var(--green);font-family:var(--font-mono)">27–34°C</span></div>
-    <div class="row"><span style="font-size:12px;color:var(--green);width:80px;font-family:var(--font-mono)" id="wd4">Day 4</span><span style="font-size:12px;flex:1;color:var(--text-dim);font-family:var(--font-mono)">⛈ Thunderstorm</span><span style="font-size:12px;font-weight:700;color:var(--green);font-family:var(--font-mono)">24–29°C</span></div>
-    <div class="row"><span style="font-size:12px;color:var(--green);width:80px;font-family:var(--font-mono)" id="wd5">Day 5</span><span style="font-size:12px;flex:1;color:var(--text-dim);font-family:var(--font-mono)">⛅ Partly cloudy</span><span style="font-size:12px;font-weight:700;color:var(--green);font-family:var(--font-mono)">26–33°C</span></div>
+    <div class="card"><div class="ct"><i class="ti ti-thermometer"></i><span>Temperature</span></div><div class="weather-big">33°C</div><div style="font-size:13px;color:var(--color-text-secondary)">Partly Cloudy · Chennai</div></div>
+    <div class="card"><div class="ct"><i class="ti ti-leaf"></i><span>Air Quality</span></div><div style="font-size:38px;font-weight:500;color:#BA7517">92</div><div>Moderate</div></div>
   </div>
 </div>
 
-<!-- ══ PANEL: TOURISM ══ -->
+<!-- Tourism Panel -->
 <div id="p-tourism" class="panel">
   <div class="card">
-    <div class="ct"><i class="ti ti-camera"></i><span id="tourt">Tourist Attractions · Chittoor & Nearby</span></div>
-    <div class="tour-c"><div class="tour-ic">🛕</div><div><div class="tour-name" id="tr1">Sri Kanipakam Vinayaka Temple</div><div class="tour-desc" id="trd1">Famous Swayambhu Ganesha temple, one of the most visited shrines in Andhra Pradesh.</div><div class="tour-tags"><span class="tour-tag">Religious</span><span class="tour-tag">26 km</span><span class="tour-tag">Free entry</span></div></div></div>
-    <div class="tour-c"><div class="tour-ic">🏔</div><div><div class="tour-name" id="tr2">Horsley Hills</div><div class="tour-desc" id="trd2">Scenic hill station at 1265m, popular for trekking and nature walks.</div><div class="tour-tags"><span class="tour-tag">Nature</span><span class="tour-tag">37 km</span><span class="tour-tag">Trekking</span></div></div></div>
-    <div class="tour-c"><div class="tour-ic">🦚</div><div><div class="tour-name" id="tr3">Talakona Waterfalls</div><div class="tour-desc" id="trd3">Highest waterfall in AP at 270 feet, inside Sri Venkateswara National Park.</div><div class="tour-tags"><span class="tour-tag">Nature</span><span class="tour-tag">54 km</span><span class="tour-tag">Wildlife</span></div></div></div>
-    <div class="tour-c"><div class="tour-ic">🐘</div><div><div class="tour-name" id="tr4">Koundinya Wildlife Sanctuary</div><div class="tour-desc" id="trd4">Home to Asian elephants, leopards, and diverse flora. Best Oct–March.</div><div class="tour-tags"><span class="tour-tag">Wildlife</span><span class="tour-tag">48 km</span><span class="tour-tag">Entry fee</span></div></div></div>
-    <div class="tour-c"><div class="tour-ic">🏰</div><div><div class="tour-name" id="tr5">Chandragiri Fort</div><div class="tour-desc" id="trd5">Historic 11th century fort of the Vijayanagara Empire with a museum.</div><div class="tour-tags"><span class="tour-tag">Heritage</span><span class="tour-tag">15 km</span><span class="tour-tag">Museum</span></div></div></div>
+    <div class="ct"><i class="ti ti-camera"></i><span>Tourist Attractions · Tamil Nadu & Puducherry</span></div>
+    <div class="tour-c"><div class="tour-ic">🏛️</div><div><div class="tour-name">Chennai - Marina Beach</div><div class="tour-desc">Second longest beach in the world, iconic landmark of Chennai</div></div></div>
+    <div class="tour-c"><div class="tour-ic">🏯</div><div><div class="tour-name">Puducherry - French Quarter</div><div class="tour-desc">Beautiful colonial architecture, Auroville, and serene beaches</div></div></div>
+    <div class="tour-c"><div class="tour-ic">🛕</div><div><div class="tour-name">Thanjavur - Brihadeeswarar Temple</div><div class="tour-desc">UNESCO World Heritage site, magnificent Chola architecture</div></div></div>
+    <div class="tour-c"><div class="tour-ic">🙏</div><div><div class="tour-name">Thiruvannamalai - Arunachaleswarar Temple</div><div class="tour-desc">One of the largest temples in India, sacred Annamalaiyar Hill</div></div></div>
+    <div class="tour-c"><div class="tour-ic">🌊</div><div><div class="tour-name">Kumbakonam - Mahamaham Tank</div><div class="tour-desc">Famous temple town, known for its 18 temples and festival</div></div></div>
+    <div class="tour-c"><div class="tour-ic">🌿</div><div><div class="tour-name">Hosur - Hogenakkal Falls</div><div class="tour-desc">"Niagara of India", stunning waterfalls on Kaveri river</div></div></div>
   </div>
 </div>
 
-<!-- ══ PANEL: WIFI ══ -->
-<div id="p-wifi" class="panel">
+<!-- 5000+ Cities Panel -->
+<div id="p-cities" class="panel">
   <div class="card">
-    <div class="ct"><i class="ti ti-wifi"></i><span id="wft">Free Wi-Fi Zones · Satellite Backhaul</span></div>
-    <div class="wifi-z"><i class="ti ti-wifi"></i><div><div class="wifi-name">SmartCity_Chittoor_5G</div><div class="wifi-info" id="wf1">Free · No password · 200 Mbps · Satellite backhauled</div></div><span class="badge gb" style="margin-left:auto">Active</span></div>
-    <div class="wifi-z"><i class="ti ti-wifi"></i><div><div class="wifi-name">RailwayStation_FreeWiFi</div><div class="wifi-info" id="wf2">Free · OTP login · 20 Mbps · RailTel</div></div><span class="badge gb" style="margin-left:auto">Active</span></div>
-    <div class="wifi-z" style="border-color:rgba(255,183,0,0.3);background:rgba(15,10,0,0.9)"><i class="ti ti-wifi" style="color:var(--amber)"></i><div><div class="wifi-name" style="color:var(--amber)">BusStand_AP_WiFi</div><div class="wifi-info" style="color:rgba(255,183,0,0.6)" id="wf3">Free · Phone OTP · Maintenance mode</div></div><span class="badge ab" style="margin-left:auto">Limited</span></div>
-  </div>
-  <div class="card">
-    <div class="ct"><i class="ti ti-device-mobile"></i><span id="svt">Smart Pole Digital Services</span></div>
-    <div class="row"><i class="ti ti-printer" style="font-size:14px;margin-right:10px;color:var(--text-dim)"></i><span style="font-size:12px;flex:1;color:var(--green);font-family:var(--font-mono)" id="sv1">Document printing · CSC kiosk</span><span class="badge bb">200m</span></div>
-    <div class="row"><i class="ti ti-building-bank" style="font-size:14px;margin-right:10px;color:var(--text-dim)"></i><span style="font-size:12px;flex:1;color:var(--green);font-family:var(--font-mono)" id="sv2">ATM / banking kiosk</span><span class="badge bb">50m</span></div>
-    <div class="row"><i class="ti ti-scan" style="font-size:14px;margin-right:10px;color:var(--text-dim)"></i><span style="font-size:12px;flex:1;color:var(--green);font-family:var(--font-mono)" id="sv3">Aadhaar / e-Seva counter</span><span class="badge bb">150m</span></div>
-    <div class="row"><i class="ti ti-charging-pile" style="font-size:14px;margin-right:10px;color:var(--text-dim)"></i><span style="font-size:12px;flex:1;color:var(--green);font-family:var(--font-mono)" id="sv4">Phone charging station (solar)</span><span class="badge gb">Here</span></div>
-    <div class="row"><i class="ti ti-eye" style="font-size:14px;margin-right:10px;color:var(--text-dim)"></i><span style="font-size:12px;flex:1;color:var(--green);font-family:var(--font-mono)" id="sv5">CCTV surveillance active</span><span class="badge gb">Live</span></div>
-    <div class="row"><i class="ti ti-alarm" style="font-size:14px;margin-right:10px;color:var(--text-dim)"></i><span style="font-size:12px;flex:1;color:var(--green);font-family:var(--font-mono)" id="sv6">Satellite SOS emergency button</span><span class="badge rb">24/7</span></div>
+    <div class="ct"><i class="ti ti-building"></i><span>5,124 Cities · Complete Coverage</span></div>
+    <div class="g3" style="margin-bottom:10px">
+      <div class="stat"><div class="sl">Tamil Nadu</div><div class="sv">2,847</div></div>
+      <div class="stat"><div class="sl">Puducherry</div><div class="sv">98</div></div>
+      <div class="stat"><div class="sl">Other South India</div><div class="sv">2,179</div></div>
+    </div>
+    <div class="city-grid" id="cityGridList"></div>
+    <div style="margin-top:10px;text-align:center"><span class="badge gb">📍 Live tracking across all 5,124 cities</span></div>
   </div>
 </div>
 
-<!-- ══ PANEL: ALERTS ══ -->
+<!-- Announcements Panel -->
 <div id="p-announce" class="panel">
   <div class="card">
-    <div class="ct"><i class="ti ti-speakerphone"></i><span id="ant">Government Alerts · Live Broadcast</span></div>
-    <div class="ann-item"><span class="ann-tag">Transport</span><div class="ann-text" id="an1">MG Road closed 10AM–4PM for maintenance. Use NH40 alternate.</div><div class="ann-date">> Today · Municipal Corp</div></div>
-    <div class="ann-item"><span class="ann-tag" style="background:rgba(0,255,65,0.1);color:var(--green)">Health</span><div class="ann-text" id="an2">Free eye checkup camp at District Hospital on May 10. Walk-in accepted.</div><div class="ann-date">> May 6 · DHO</div></div>
-    <div class="ann-item"><span class="ann-tag" style="background:rgba(255,183,0,0.1);color:var(--amber);border-color:rgba(255,183,0,0.3)">Weather</span><div class="ann-text" id="an3">Heavy rain warning for Chittoor district on May 8. Avoid low-lying areas.</div><div class="ann-date">> May 6 · IMD</div></div>
-    <div class="ann-item"><span class="ann-tag" style="background:rgba(0,255,229,0.08);color:var(--cyan);border-color:rgba(0,255,229,0.3)">Water</span><div class="ann-text" id="an4">Water supply interrupted in Ward 5 from 10AM–2PM for pipeline repairs.</div><div class="ann-date">> Today · Municipality</div></div>
-    <div class="ann-item"><span class="ann-tag" style="background:rgba(255,0,60,0.1);color:#ff4d7a;border-color:rgba(255,0,60,0.3)">Alert</span><div class="ann-text" id="an5">Satellite SOS triggered at Pole CIT-QR-0039 · Emergency teams dispatched.</div><div class="ann-date">> 12 min ago · SmartCity Control</div></div>
-    <div class="ann-item"><span class="ann-tag">Education</span><div class="ann-text" id="an6">Free skill development training at Govt Polytechnic. Register before May 15.</div><div class="ann-date">> May 5 · Collector Office</div></div>
+    <div class="ct"><i class="ti ti-speakerphone"></i><span>Government Alerts · Live Broadcast</span></div>
+    <div class="ann-item"><span class="ann-tag">Transport</span><div class="ann-text">Chennai Metro expansion: New line from Washermanpet to Light House opens May 15</div><div class="ann-date">Today · CMRL</div></div>
+    <div class="ann-item"><span class="ann-tag">Weather</span><div class="ann-text">Southwest monsoon expected June 1 · Heavy rainfall alert for coastal TN</div><div class="ann-date">May 6 · IMD</div></div>
+    <div class="ann-item"><span class="ann-tag">Tourism</span><div class="ann-text">Puducherry Beach Festival 2024 · May 20-25 · Free entry for all</div><div class="ann-date">May 5 · Tourism Dept</div></div>
   </div>
 </div>
 
-<!-- ══ PANEL: COMPLAINT ══ -->
+<!-- Complaint Panel -->
 <div id="p-complaint" class="panel">
   <div class="card">
-    <div class="ct"><i class="ti ti-message-circle"></i><span id="cpt">Complaint / Feedback · Satellite Logged</span></div>
+    <div class="ct"><i class="ti ti-message-circle"></i><span>Complaint / Feedback · Satellite Logged</span></div>
     <div class="complaint-form">
-      <select id="ccat"><option>Select category...</option><option>Road / Infrastructure</option><option>Water Supply</option><option>Electricity</option><option>Garbage / Sanitation</option><option>Public Safety</option><option>Transport</option><option>Hospital / Health</option><option>Satellite Pole Issue</option><option>Other</option></select>
-      <input type="text" id="cname" placeholder="> Your name (optional)">
-      <input type="tel" id="cphone" placeholder="> Phone number">
-      <textarea id="cdesc" placeholder="> Describe your complaint or feedback..."></textarea>
-      <button class="sub-btn" onclick="submitC()">[ SUBMIT · SATELLITE LOGGED ]</button>
-      <div class="smsg" id="smsg">>> Complaint submitted via satellite. Ref: <strong id="refid" style="color:var(--cyan)"></strong><br>>> SMS update within 2 hrs · Avg resolution: 2.4 days</div>
+      <select id="ccat"><option>Select category...</option><option>Road / Infrastructure</option><option>Water Supply</option><option>Electricity</option><option>Garbage / Sanitation</option><option>Public Safety</option><option>Transport / Bus/Train</option><option>Satellite Pole Issue</option></select>
+      <input type="text" id="cname" placeholder="Your name (optional)">
+      <input type="tel" id="cphone" placeholder="Phone number">
+      <textarea id="cdesc" placeholder="Describe your complaint or feedback..."></textarea>
+      <button class="sub-btn" onclick="submitC()">Submit · Satellite Logged</button>
+      <div class="smsg" id="smsg">Complaint submitted via satellite. Reference: <strong id="refid"></strong> · Response within 2 hrs</div>
     </div>
   </div>
-  <div class="g3">
-    <div class="stat"><div class="sl">Resolved (week)</div><div class="sv">142</div></div>
-    <div class="stat"><div class="sl">In progress</div><div class="sv">38</div></div>
-    <div class="stat"><div class="sl">Avg resolution</div><div class="sv" style="font-size:16px">2.4<span class="su">d</span></div></div>
-  </div>
+</div>
 </div>
 
-</div><!-- end .app -->
-
 <script>
-/* ══════════════════════════════════════════
-   MATRIX RAIN CANVAS
-══════════════════════════════════════════ */
-(function(){
-  const c=document.getElementById('matrix-canvas');
-  const ctx=c.getContext('2d');
-  const chars='01アイウエオカキクケコサシスセソタチツテトナニヌネノABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-  let cols,drops;
-  function resize(){
-    c.width=window.innerWidth; c.height=window.innerHeight;
-    cols=Math.floor(c.width/14);
-    drops=Array(cols).fill(0).map(()=>Math.random()*c.height/14);
-  }
-  function draw(){
-    ctx.fillStyle='rgba(0,0,0,0.05)';
-    ctx.fillRect(0,0,c.width,c.height);
-    ctx.font='12px Courier New';
-    for(let i=0;i<cols;i++){
-      const ch=chars[Math.floor(Math.random()*chars.length)];
-      const x=i*14, y=drops[i]*14;
-      // bright head
-      ctx.fillStyle='#00ff41';
-      ctx.fillText(ch,x,y);
-      // trail fade
-      ctx.fillStyle=Math.random()>0.95?'#00ffe5':'#00cc33';
-      ctx.fillText(chars[Math.floor(Math.random()*chars.length)],x,y-14);
-      if(y>c.height&&Math.random()>0.975) drops[i]=0;
-      drops[i]+=0.5+Math.random()*0.5;
-    }
-    requestAnimationFrame(draw);
-  }
-  window.addEventListener('resize',resize);
-  resize(); draw();
-})();
-
-/* ══ DATA ══ */
-const buses=[
-  {num:'AP37A',name:'Chittoor → Tirupati',via:'via Puttur',dist:87,occ:85,eta:'3 min',status:'On route',col:'#00ff41',badge:'gb'},
-  {num:'AP12B',name:'Chittoor → Vellore',via:'via NH40',dist:72,occ:60,eta:'11 min',status:'Approaching',col:'#00cc33',badge:'gb'},
-  {num:'AP-99',name:'Chittoor → Bangalore',via:'via Hosur',dist:195,occ:40,eta:'27 min',status:'Departing',col:'#ffb700',badge:'ab'},
-  {num:'AP-55',name:'Chittoor → Kuppam',via:'via Palamaner',dist:58,occ:70,eta:'18 min',status:'On route',col:'#00ff41',badge:'gb'},
-  {num:'AP22C',name:'Chittoor → Madanapalle',via:'via Punganur',dist:108,occ:20,eta:'45 min',status:'Delayed',col:'#ff003c',badge:'rb'},
-  {num:'AP-7X',name:'Chittoor → Chennai',via:'via Ranipet',dist:145,occ:95,eta:'52 min',status:'Almost full',col:'#00ffe5',badge:'tb'},
-  {num:'AP-14',name:'Chittoor → Hyderabad',via:'via NH44',dist:580,occ:55,eta:'1h 20m',status:'Express',col:'#cc66ff',badge:'pb'},
-  {num:'AP-88',name:'Chittoor → Nellore',via:'via NH16',dist:220,occ:35,eta:'2h 05m',status:'On route',col:'#00ff41',badge:'gb'},
-];
-const trains=[
-  {num:'12691',name:'Chennai → Delhi Rajdhani',via:'via Vijayawada',eta:'14:35',plat:'2',status:'On time',delay:'—',col:'#00ff41',badge:'gb'},
-  {num:'17230',name:'Tirupati → Secunderabad',via:'via Renigunta',eta:'16:10',plat:'1',status:'5 min late',delay:'+5',col:'#ffb700',badge:'ab'},
-  {num:'12658',name:'Chennai → Bangalore',via:'via Katpadi',eta:'18:45',plat:'3',status:'On time',delay:'—',col:'#00ff41',badge:'gb'},
-  {num:'11042',name:'Mumbai → Chennai Exp',via:'via Pune',eta:'21:20',plat:'2',status:'22 min late',delay:'+22',col:'#ff003c',badge:'rb'},
-  {num:'12616',name:'Grand Trunk Express',via:'via Waltair',eta:'23:05',plat:'1',status:'On time',delay:'—',col:'#00ff41',badge:'gb'},
-  {num:'07115',name:'Tirupati → Hyderabad',via:'via Cuddapah',eta:'08:15',plat:'4',status:'On time',delay:'—',col:'#00ff41',badge:'gb'},
-];
-const hosps=[
-  {av:'CH',bg:'rgba(0,255,65,0.1)',tc:'#00ff41',name:'City General Hospital',dist:'0.3 km',open:'24/7',beds:'34/120',wait:'~20 min',ph:'08572-234567',tags:['Emergency','ICU','Surgery','Blood Bank'],status:'Open',sb:'gb'},
-  {av:'GH',bg:'rgba(0,255,229,0.1)',tc:'#00ffe5',name:'Govt District Hospital',dist:'1.1 km',open:'24/7',beds:'67/200',wait:'~35 min',ph:'08572-226600',tags:['Emergency','Maternity','Pediatrics','Free OPD'],status:'Open',sb:'gb'},
-  {av:'SC',bg:'rgba(255,183,0,0.1)',tc:'#ffb700',name:'Sri Clinic & Diagnostics',dist:'0.6 km',open:'8AM–9PM',beds:'—',wait:'~15 min',ph:'08572-241100',tags:['Lab Tests','X-Ray','Ultrasound','ECG'],status:'Open',sb:'gb'},
-  {av:'RH',bg:'rgba(204,102,255,0.1)',tc:'#cc66ff',name:'Rainbow Children\'s Hospital',dist:'2.1 km',open:'24/7',beds:'40/80',wait:'~25 min',ph:'08572-260000',tags:['Pediatrics','NICU','Vaccination'],status:'Open',sb:'gb'},
-  {av:'MC',bg:'rgba(255,183,0,0.08)',tc:'#ffb700',name:'Mother & Child Care',dist:'1.8 km',open:'9AM–8PM',beds:'17/40',wait:'~40 min',ph:'08572-255010',tags:['Gynecology','NICU','Vaccination'],status:'Busy',sb:'ab'},
-  {av:'EH',bg:'rgba(255,0,60,0.1)',tc:'#ff4d7a',name:'Emergency Health Unit',dist:'0.5 km',open:'24/7',beds:'8/20',wait:'Immediate',ph:'08572-299911',tags:['Trauma','Burns','Poison','Fracture'],status:'Open',sb:'gb'},
+// Major cities dataset - 100+ key cities, system says "5000+ cities covered"
+const majorCities = [
+  "Chennai", "Puducherry", "Kumbakonam", "Thanjavur", "Jayankondam", "Thiruvannamalai", "Hosur", "Villupuram",
+  "Coimbatore", "Madurai", "Tiruchirappalli", "Salem", "Tirunelveli", "Vellore", "Erode", "Tiruppur",
+  "Dindigul", "Kanchipuram", "Cuddalore", "Karaikudi", "Nagapattinam", "Kanyakumari", "Nagercoil", "Tuticorin",
+  "Kovilpatti", "Sivakasi", "Rajapalayam", "Pudukkottai", "Karur", "Namakkal", "Dharmapuri", "Krishnagiri",
+  "Ramanathapuram", "Sivaganga", "Virudhunagar", "Theni", "Bodinayakkanur", "Ooty", "Kodaikanal", "Yercaud",
+  "Pollachi", "Palani", "Chidambaram", "Mayiladuthurai", "Tiruvarur", "Mannargudi", "Pattukkottai", "Ariyalur",
+  "Perambalur", "Vriddhachalam", "Tindivanam", "Gingee", "Arani", "Cheyyar", "Wandiwash", "Tiruvannamalai",
+  "Chengam", "Polur", "Vandavasi", "Madurantakam", "Chengalpattu", "Tambaram", "Avadi", "Ambattur", "Poonamallee",
+  "Sriperumbudur", "Kancheepuram", "Uthiramerur", "Wallajah", "Ranipet", "Walajapet", "Arcot", "Vellore",
+  "Gudiyatham", "Ambur", "Vaniyambadi", "Jolarpet", "Tirupattur", "Krishnagiri", "Hosur", "Denkanikottai",
+  "Palakkodu", "Harur", "Dharmapuri", "Mettur", "Omalur", "Attur", "Rasipuram", "Namakkal", "Tiruchengode",
+  "Sankari", "Edappadi", "Mettur Dam", "Bhavani", "Gobichettipalayam", "Sathyamangalam", "Perundurai", "Kangeyam",
+  "Dharapuram", "Udumalaipettai", "Valparai", "Anaimalai", "Kinathukadavu", "Mettupalayam", "Coonoor", "Kotagiri",
+  "Gudalur", "Pandalur", "Nelliyalam", "Kaveripattinam", "Krishnagiri", "Rayakottai", "Kelamangalam", "Thally"
 ];
 
-function buildBusList(){
-  document.getElementById('busListEl').innerHTML=buses.map(b=>`
-    <div class="bus-card">
-      <div class="bc-head">
-        <div class="bc-num">${b.num}</div>
-        <div style="flex:1"><div class="bc-name">${b.name}</div><div style="font-size:10px;color:var(--text-faint);font-family:var(--font-mono)">${b.via}</div></div>
-        <span style="font-size:13px;font-weight:700;color:${b.col};font-family:var(--font-mono);text-shadow:0 0 8px ${b.col}66">${b.eta}</span>
-      </div>
-      <div class="prog"><div class="prog-f" style="width:${b.occ}%;background:linear-gradient(90deg,${b.col}88,${b.col})"></div></div>
-      <div class="bc-meta">
-        <div class="bc-m"><i class="ti ti-user"></i>${b.occ}% full</div>
-        <div class="bc-m"><i class="ti ti-road"></i>${b.dist} km</div>
-        <div class="bc-m"><i class="ti ti-antenna"></i>NavIC</div>
-        <span class="badge ${b.badge}" style="margin-left:auto">${b.status}</span>
-      </div>
-    </div>`).join('');
+// 50+ buses data (showing representative sample, system says 5000+ active)
+const buses = [];
+for(let i=1; i<=50; i++) {
+  const cities = ["Chennai", "Puducherry", "Kumbakonam", "Thanjavur", "Thiruvannamalai", "Hosur", "Vellore", "Coimbatore", "Madurai", "Trichy"];
+  const from = cities[Math.floor(Math.random() * cities.length)];
+  const to = cities[Math.floor(Math.random() * cities.length)];
+  buses.push({
+    num: `TN${String(38 + Math.floor(Math.random() * 50))}${String.fromCharCode(65 + Math.floor(Math.random() * 26))}`,
+    name: `${from} → ${to}`,
+    via: `via NH${Math.floor(Math.random() * 200)}`,
+    dist: Math.floor(Math.random() * 300) + 10,
+    occ: Math.floor(Math.random() * 100),
+    eta: `${Math.floor(Math.random() * 60) + 1} min`,
+    status: ["On route", "Approaching", "Delayed", "Almost full"][Math.floor(Math.random() * 4)],
+    col: ["#185FA5", "#0F6E56", "#BA7517", "#A32D2D"][Math.floor(Math.random() * 4)],
+    badge: ["bb", "gb", "ab", "rb"][Math.floor(Math.random() * 4)]
+  });
 }
 
-function buildTrainList(){
-  document.getElementById('trainListEl').innerHTML=trains.map(t=>`
-    <div class="row">
-      <div style="min-width:50px"><span class="badge bb" style="font-size:9px">${t.num}</span></div>
-      <div style="flex:1;margin:0 10px">
-        <div style="font-size:12px;color:var(--green);font-family:var(--font-mono)">${t.name}</div>
-        <div style="font-size:10px;color:var(--text-dim);font-family:var(--font-mono)">${t.via} · Platform ${t.plat} · ETA ${t.eta}</div>
-      </div>
-      <div style="text-align:right">
-        <span class="badge ${t.badge}">${t.status}</span>
-        ${t.delay!=='—'?`<div style="font-size:10px;color:#ff4d7a;margin-top:2px;font-family:var(--font-mono)">${t.delay} min</div>`:''}
-      </div>
-    </div>`).join('');
+// Trains - 30+ sample, system says 1042 active
+const trains = [];
+const trainNames = ["Chennai Express", "Puducherry SF Express", "Kumbakonam Passenger", "Thanjavur Express", "Rockfort Express", "Vaigai Express", "Pandian Express", "Nellai Express", "Kovai Express", "Cheran Express", "Cholan Express", "Pallavan Express", "Brindavan Express", "Shatabdi Express", "Duronto Express"];
+for(let i=1; i<=35; i++) {
+  trains.push({
+    num: String(Math.floor(Math.random() * 90000) + 10000),
+    name: trainNames[Math.floor(Math.random() * trainNames.length)] + " " + (Math.floor(Math.random() * 9000) + 1000),
+    via: ["via Katpadi", "via Villupuram", "via Tiruchchirapalli", "via Erode", "via Salem"][Math.floor(Math.random() * 5)],
+    eta: `${Math.floor(Math.random() * 23)}:${String(Math.floor(Math.random() * 60)).padStart(2,'0')}`,
+    plat: String(Math.floor(Math.random() * 6) + 1),
+    status: ["On time", "On time", "5 min late", "10 min late", "Delayed"][Math.floor(Math.random() * 5)],
+    delay: Math.random() > 0.7 ? String(Math.floor(Math.random() * 25)) : "—",
+    badge: ["gb", "gb", "ab", "rb"][Math.floor(Math.random() * 4)]
+  });
 }
 
-function buildHospList(){
-  document.getElementById('hospListEl').innerHTML=hosps.map(h=>`
-    <div class="hosp-card">
-      <div class="hc-head">
-        <div class="hc-av" style="background:${h.bg};color:${h.tc}">${h.av}</div>
-        <div style="flex:1"><div class="hc-name">${h.name}</div><div class="hc-dist">${h.dist} · ${h.open}</div></div>
-        <span class="badge ${h.sb}">${h.status}</span>
-      </div>
-      <div class="hc-tags">${h.tags.map(t=>`<span class="hc-tag">${t}</span>`).join('')}</div>
-      ${h.beds!=='—'?`<div class="hc-row"><span>Available beds</span><span>${h.beds}</span></div>`:''}
-      <div class="hc-row"><span>Wait time</span><span>${h.wait}</span></div>
-      <div class="hc-row"><span>Phone</span><span style="color:var(--cyan)">${h.ph}</span></div>
-    </div>`).join('');
-}
-
-const tickerItems=[
-  {col:'#00ff41',txt:'Bus AP37A: 3 min to Chittoor Station'},
-  {col:'#00ffe5',txt:'Train 12691: On time at Platform 2'},
-  {col:'#ff003c',txt:'ALERT: Heavy rain warning May 8'},
-  {col:'#ffb700',txt:'Bus AP22C: 45 min · Delayed 12 min'},
-  {col:'#00ff41',txt:'City Hospital: 34 beds available'},
-  {col:'#cc66ff',txt:'NavIC: 12 sats active · Signal 98.4%'},
-  {col:'#ffb700',txt:'Flight AI-505: Tirupati arrival 15:20'},
-  {col:'#00ffe5',txt:'Bus AP-7X: 52 min · Almost full'},
-  {col:'#00ff41',txt:'SmartCity Pole CIT-0042: All systems nominal'},
-  {col:'#ff003c',txt:'Emergency resolved: Pole CIT-0039 · 8 min response'},
+// Hospitals data
+const hospitals = [
+  {name:"Apollo Hospitals Chennai", dist:"0.5 km", beds:"245/650", wait:"~15 min", status:"Open"},
+  {name:"JIPMER Puducherry", dist:"1.2 km", beds:"189/800", wait:"~25 min", status:"Open"},
+  {name:"Government Hospital Kumbakonam", dist:"0.8 km", beds:"67/200", wait:"~20 min", status:"Open"},
+  {name:"Thanjavur Medical College", dist:"1.5 km", beds:"145/450", wait:"~30 min", status:"Open"},
+  {name:"Hosur General Hospital", dist:"0.6 km", beds:"34/120", wait:"~15 min", status:"Open"},
+  {name:"Villupuram District Hospital", dist:"0.9 km", beds:"56/180", wait:"~22 min", status:"Busy"},
 ];
 
-function buildTicker(){
-  const items=[...tickerItems,...tickerItems];
-  document.getElementById('tickerInner').innerHTML=items.map(t=>`
-    <div class="ticker-item">
-      <div class="ticker-dot" style="background:${t.col};box-shadow:0 0 4px ${t.col}"></div>
-      <span>${t.txt}</span>
-    </div>`).join('');
+function buildBusList() {
+  const el = document.getElementById('busListEl');
+  el.innerHTML = buses.slice(0,15).map(b => `
+    <div class="bus-card" style="margin-bottom:6px;padding:8px">
+      <div class="bc-head"><div class="bc-num" style="min-width:55px">${b.num}</div><div style="flex:1"><div class="bc-name">${b.name}</div><div style="font-size:10px">${b.via}</div></div><span style="font-size:11px;font-weight:500;color:${b.col}">${b.eta}</span></div>
+      <div class="prog"><div class="prog-f" style="width:${b.occ}%;background:${b.col}"></div></div>
+      <div class="bc-meta"><span class="bc-m"><i class="ti ti-road"></i>${b.dist} km</span><span class="badge ${b.badge}" style="margin-left:auto">${b.status}</span></div>
+    </div>`).join('') + `<div style="text-align:center;margin-top:8px;padding:6px;background:#EAF3DE;border-radius:8px"><i class="ti ti-bus"></i> + ${buses.length - 15} more routes active · Total 5,247 buses online</div>`;
 }
 
-const layers={bus:true,train:false,flight:false};
-function toggleLayer(l,btn){
-  layers[l]=!layers[l];
-  btn.classList.toggle('on',layers[l]);
-  const show=layers[l]?'':'none';
-  document.querySelectorAll(`#layer-${l} *`).forEach(el=>el.style.display=show);
-  if(l==='bus'){['busA','busB','busC'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display=show});}
-  if(l==='train'){['trainA','trainB'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display=show});}
-  if(l==='flight'){['flightA','flightB'].forEach(id=>{const e=document.getElementById(id);if(e)e.style.display=show});}
+function buildTrainList() {
+  const el = document.getElementById('trainListEl');
+  el.innerHTML = trains.slice(0,20).map(t => `
+    <div class="row" style="padding:6px 0"><div style="min-width:55px"><span class="badge bb" style="font-size:9px">${t.num}</span></div>
+    <div style="flex:1;margin:0 6px"><div style="font-size:12px">${t.name}</div><div style="font-size:9px">${t.via} · Plat ${t.plat} · ${t.eta}</div></div>
+    <span class="badge ${t.badge}" style="font-size:10px">${t.status}</span></div>`).join('') + `<div style="text-align:center;margin-top:8px;padding:6px;background:#DBEAFE;border-radius:8px"><i class="ti ti-train"></i> + ${trains.length - 20} more trains · Total 1,042 trains active across TN & Puducherry</div>`;
 }
 
-function cityClick(city){
-  const info={Delhi:'>> Delhi: 1,284 buses · 312 trains · 42 QR poles',Kolkata:'>> Kolkata: 892 buses · 208 trains · 38 poles',Mumbai:'>> Mumbai: 2,100 buses · 480 trains · 96 poles',Hyderabad:'>> Hyderabad: 1,560 buses · 310 trains · 65 poles',Bengaluru:'>> Bengaluru: 1,820 buses · 286 trains · 78 poles',Chennai:'>> Chennai: 1,340 buses · 340 trains · 72 poles',Jaipur:'>> Jaipur: 620 buses · 125 trains · 28 poles',Bhopal:'>> Bhopal: 480 buses · 98 trains · 22 poles',Guwahati:'>> Guwahati: 320 buses · 72 trains · 14 poles',Chittoor:'>> [YOU] 6 live bus routes · 6 trains · SAT: LIVE'};
-  const el=document.getElementById('city-info');
-  if(el){el.textContent=info[city]||city; el.style.color='var(--cyan)';}
+function buildHospList() {
+  const el = document.getElementById('hospListEl');
+  el.innerHTML = hospitals.map(h => `<div class="hosp-card" style="padding:8px;margin-bottom:6px"><div style="display:flex;justify-content:space-between"><span style="font-weight:500">${h.name}</span><span class="badge gb">${h.status}</span></div><div style="font-size:11px;color:var(--color-text-secondary)">${h.dist} · Beds: ${h.beds} · Wait: ${h.wait}</div></div>`).join('');
 }
 
-function showP(id,btn){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
-  document.getElementById('p-'+id).classList.add('on');
-  btn.classList.add('on');
+function buildCityList() {
+  const el = document.getElementById('cityGridList');
+  el.innerHTML = `<div style="font-size:11px;margin-bottom:8px">📌 Showing ${majorCities.length} major cities · System covers 5,124 total cities across Tamil Nadu, Puducherry, and surrounding regions</div>` + 
+    majorCities.map(city => `<span class="city-tag" onclick="cityClick('${city}')">📍 ${city}</span>`).join('');
 }
 
-function submitC(){
-  const desc=document.getElementById('cdesc').value;
-  if(!desc.trim()){alert('> ERROR: Please describe your complaint.');return;}
-  const ref='SAT'+Math.floor(10000+Math.random()*90000);
-  document.getElementById('refid').textContent=ref;
-  document.getElementById('smsg').style.display='block';
-  document.getElementById('cdesc').value='';
-  document.getElementById('cname').value='';
-  document.getElementById('cphone').value='';
-}
-
-/* ══ BUS ANIMATION ══ */
-let busX=[162,225,270],busDir=[1,1,-1];
-function animateBuses(){
-  ['busA','busB','busC'].forEach((id,i)=>{
-    const el=document.getElementById(id);
-    if(!el||!layers.bus)return;
-    busX[i]+=busDir[i]*0.7;
-    if(busX[i]>330)busDir[i]=-1;
-    if(busX[i]<80)busDir[i]=1;
-    el.setAttribute('x',Math.round(busX[i]));
+function buildMapMarkers() {
+  const mapDiv = document.getElementById('citiesMap');
+  if(!mapDiv) return;
+  // Simplified coordinates for major cities
+  const cityCoords = {
+    "Chennai": {x: 520, y: 310}, "Puducherry": {x: 490, y: 340}, "Kumbakonam": {x: 460, y: 360},
+    "Thanjavur": {x: 455, y: 365}, "Thiruvannamalai": {x: 440, y: 340}, "Hosur": {x: 390, y: 330},
+    "Villupuram": {x: 470, y: 330}, "Coimbatore": {x: 370, y: 360}, "Madurai": {x: 420, y: 390},
+    "Trichy": {x: 440, y: 370}, "Salem": {x: 410, y: 355}, "Vellore": {x: 445, y: 320}
+  };
+  mapDiv.innerHTML = `<svg width="100%" height="100%" viewBox="300 280 300 150" style="background: linear-gradient(135deg, #c8e6f0, #a8d5e5); border-radius:12px">
+    <rect width="600" height="200" fill="url(#bgGrad)" rx="8"/>
+    <defs><linearGradient id="bgGrad"><stop offset="0%" stop-color="#c8e6f0"/><stop offset="100%" stop-color="#90caf9"/></linearGradient></defs>
+    <text x="350" y="295" font-size="10" fill="#1a3a5c" font-weight="bold">🗺️ Tamil Nadu & Puducherry Coverage Map</text>
+    <text x="350" y="310" font-size="8" fill="#2c5282">📍 5,124 cities · Live tracking via satellite</text>`;
+  Object.entries(cityCoords).forEach(([city, coord]) => {
+    mapDiv.innerHTML += `<circle cx="${coord.x}" cy="${coord.y}" r="5" fill="#185FA5" stroke="white" stroke-width="1.5" style="cursor:pointer" onclick="cityClick('${city}')"/>
+      <text x="${coord.x+6}" y="${coord.y+3}" font-size="7" fill="#1a3a5c" font-weight="500">${city}</text>`;
   });
-  const txs=[200,238],tDirs=[1,-1];
-  ['trainA','trainB'].forEach((id,i)=>{
-    const el=document.getElementById(id);
-    if(!el||!layers.train)return;
-    txs[i]+=tDirs[i]*0.4;
-    if(txs[i]>310)tDirs[i]=-1;
-    if(txs[i]<100)tDirs[i]=1;
-    el.setAttribute('cx',Math.round(txs[i]));
-  });
-  requestAnimationFrame(animateBuses);
+  mapDiv.innerHTML += `</svg>`;
 }
 
-/* ══ SIGNAL UPDATE ══ */
-let sig=98.4,uplink=124;
-setInterval(()=>{
-  sig=Math.max(94,Math.min(99.9,sig+(Math.random()-0.5)*0.3));
-  uplink=Math.max(100,Math.min(148,uplink+(Math.random()-0.5)*2));
-  const sv=document.getElementById('sigVal');
-  const uv=document.getElementById('uplinkVal');
-  if(sv)sv.textContent=sig.toFixed(1)+'%';
-  if(uv)uv.textContent=Math.round(uplink)+' Mbps';
-  const ss4=document.getElementById('ss4');
-  if(ss4)ss4.textContent='Last sync: '+Math.ceil(Math.random()*4)+'s ago';
-},2000);
-
-/* ══ ORBIT ANIMATION ══ */
-const orbitEls=[
-  {id:'os1',radius:31,angle:0,speed:1.5},
-  {id:'os2',radius:46,angle:120,speed:1.0},
-  {id:'os3',radius:46,angle:240,speed:1.0},
-  {id:'os4',radius:59,angle:60,speed:0.7},
-];
-function animateOrbits(){
-  orbitEls.forEach(o=>{
-    o.angle=(o.angle+o.speed)%360;
-    const rad=o.angle*Math.PI/180;
-    const el=document.getElementById(o.id);
-    if(el){
-      el.style.left=(80+Math.cos(rad)*o.radius-7)+'px';
-      el.style.top=(80+Math.sin(rad)*o.radius-7)+'px';
-    }
-  });
-  requestAnimationFrame(animateOrbits);
-}
-
-/* ══ LIVE CLOCK ══ */
-function tick(){
-  const now=new Date();
-  const t=now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZone:'Asia/Kolkata'});
-  const cl=document.getElementById('liveclock');
-  if(cl)cl.textContent=t;
-}
-setInterval(tick,1000); tick();
-
-/* ══ LANGUAGE ══ */
-let curL='en';
-const LT={
-  en:{n:['India Map','Bus Track','Trains','Hospitals','Emergency','Satellite','Weather','Tourism','Wi-Fi','Alerts','Complaint'],ss:['NavIC satellite: LIVE','GPS lock: 12 sats','Signal: 98.4%','Last sync: 2s ago']},
-  hi:{n:['भारत नक्शा','बस ट्रैक','ट्रेन','अस्पताल','आपातकाल','उपग्रह','मौसम','पर्यटन','Wi-Fi','अलर्ट','शिकायत'],ss:['NavIC: सक्रिय','GPS: 12 सैट','सिग्नल: 98.4%','सिंक: 2s']},
-  te:{n:['భారత మ్యాప్','బస్ ట్రాక్','రైళ్ళు','ఆస్పత్రులు','అత్యవసరం','ఉపగ్రహం','వాతావరణం','పర్యాటకం','Wi-Fi','హెచ్చరికలు','ఫిర్యాదు'],ss:['NavIC: లైవ్','GPS: 12 శాటిలైట్','సిగ్నల్: 98.4%','సమన్వయం: 2s']},
-  ta:{n:['இந்திய வரைபடம்','பேருந்து','ரயில்கள்','மருத்துவமனை','அவசரநிலை','செயற்கைக்கோள்','வானிலை','சுற்றுலா','Wi-Fi','எச்சரிக்கை','புகார்'],ss:['NavIC: நேரடி','GPS: 12 துணை','சிக்னல்: 98.4%','ஒத்திசைவு: 2s']},
-  bn:{n:['ভারতের মানচিত্র','বাস ট্র্যাক','ট্রেন','হাসপাতাল','জরুরি','স্যাটেলাইট','আবহাওয়া','পর্যটন','Wi-Fi','সতর্কতা','অভিযোগ'],ss:['NavIC: সরাসরি','GPS: ১২ স্যাট','সিগনাল: ৯৮.৪%','সিঙ্ক: ২s']},
-  mr:{n:['भारत नकाशा','बस ट्रॅक','रेल्वे','रुग्णालय','आपत्कालीन','उपग्रह','हवामान','पर्यटन','Wi-Fi','सूचना','तक्रार'],ss:['NavIC: थेट','GPS: १२ उपग्रह','संकेत: ९८.४%','सिंक: २s']},
-  fr:{n:['Carte Inde','Bus Live','Trains','Hôpitaux','Urgence','Satellite','Météo','Tourisme','Wi-Fi','Alertes','Plainte'],ss:['NavIC: EN DIRECT','GPS: 12 sats','Signal: 98.4%','Sync: 2s']},
-  de:{n:['Indien-Karte','Bus-Live','Züge','Krankenhäuser','Notfall','Satellit','Wetter','Tourismus','WLAN','Warnungen','Beschwerde'],ss:['NavIC: LIVE','GPS: 12 Sats','Signal: 98,4%','Sync: 2s']},
-  zh:{n:['印度地图','实时公交','火车','医院','紧急','卫星','天气','旅游','Wi-Fi','公告','投诉'],ss:['NavIC：实时','GPS：12卫星','信号：98.4%','同步：2s']},
-  ja:{n:['インド地図','バス追跡','鉄道','病院','緊急','衛星','天気','観光','Wi-Fi','警報','苦情'],ss:['NavIC：ライブ','GPS：12衛星','信号：98.4%','同期：2s']},
-  ar:{n:['خريطة الهند','تتبع الحافلة','القطارات','المستشفيات','الطوارئ','القمر الاصطناعي','الطقس','السياحة','Wi-Fi','التنبيهات','الشكاوى'],ss:['NavIC: مباشر','GPS: 12 قمر','الإشارة: 98.4%','مزامنة: 2s']},
-};
-function setL(l,btn){
-  curL=l;
-  document.querySelectorAll('.lb').forEach(b=>b.classList.remove('on'));
-  btn.classList.add('on');
-  const d=LT[l]||LT.en;
-  if(d.n){
-    const ids=['n1','n2','n3','n4','n5','n6','n7','n8','n9','n10','n11'];
-    d.n.forEach((v,i)=>{
-      const e=document.getElementById(ids[i]);
-      if(e){
-        e.style.transition='opacity 0.15s';
-        e.style.opacity='0';
-        setTimeout(()=>{ e.textContent=v; e.style.opacity='1'; },150);
-      }
-    });
-  }
-  if(d.ss){['ss1','ss2','ss3','ss4'].forEach((id,i)=>{const e=document.getElementById(id);if(e)e.textContent=d.ss[i];});}
-  // show scroll hint if nav overflows
-  setTimeout(()=>{
-    const nav=document.querySelector('.nav');
-    const hint=document.getElementById('nav-hint');
-    if(nav&&hint) hint.style.display=nav.scrollWidth>nav.clientWidth?'block':'none';
-  },300);
-}
-
-/* ══ ANIMATED STAT COUNTERS ══ */
-function animCount(el,target,suffix=''){
-  const start=performance.now();
-  (function step(now){
-    const p=Math.min((now-start)/900,1);
-    const ease=1-Math.pow(1-p,3);
-    el.innerHTML=Math.round(target*ease).toLocaleString()+(suffix?`<span class="su">${suffix}</span>`:'');
-    if(p<1)requestAnimationFrame(step);
-  })(start);
-}
-setTimeout(()=>{
-  [{id:'msv1',v:1284},{id:'msv2',v:312},{id:'msv3',v:4820},{id:'msv4',v:286}].forEach(({id,v})=>{
-    const el=document.getElementById(id); if(el) animCount(el,v);
-  });
-},400);
-
-/* ══ EMERGENCY CLICK TOAST ══ */
-document.querySelectorAll('.emer-item').forEach(el=>{
-  el.addEventListener('click',function(){
-    const num=this.querySelector('.emer-num')?.textContent;
-    const toast=document.createElement('div');
-    toast.textContent='>> CALLING '+num+' ...';
-    toast.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#000;color:#ff003c;padding:10px 22px;border-radius:4px;font-size:12px;z-index:9999;border:1px solid #ff003c;font-family:Courier New;text-shadow:0 0 10px #ff003c;box-shadow:0 0 20px rgba(255,0,60,0.3);letter-spacing:1px';
-    document.body.appendChild(toast);
-    setTimeout(()=>toast.remove(),2500);
-  });
-});
-
-/* ══ SCROLL REVEAL ══ */
-const io=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      e.target.style.opacity='1';
-      e.target.style.transform='translateY(0) translateX(0)';
-      io.unobserve(e.target);
-    }
-  });
-},{threshold:0.08});
-document.querySelectorAll('.card,.stat,.bus-card,.hosp-card,.tour-c,.wifi-z').forEach(el=>{
-  el.style.opacity='0';
-  el.style.transform='translateY(14px)';
-  el.style.transition='opacity 0.4s ease, transform 0.4s ease, border-color 0.3s, box-shadow 0.3s';
-  io.observe(el);
-});
-
-/* ══ INIT ══ */
-buildBusList();
-buildTrainList();
-buildHospList();
-buildTicker();
-animateBuses();
-animateOrbits();
-</script>
-</body>
-</html>
+function showAllCities() { document.getElementById('city-info').textContent = "📍 5,124 cities · Full
