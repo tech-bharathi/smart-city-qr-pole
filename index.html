@@ -3,370 +3,341 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Smart City QR Pole · Satellite Command · Tamil Nadu & Puducherry</title>
-  <meta name="description" content="Smart City QR Pole – satellite-connected live tracking system covering 5000+ cities across Tamil Nadu, Puducherry, and South India">
+  <title>Smart City QR Pole · ALL India Routes · Complete Coverage System</title>
+  <meta name="description" content="Complete India-wide smart city system: 50,000+ buses, 12,000+ trains, 25,000+ hospitals, 10,000+ cities, 28 states, 8 union territories">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       --border-radius-lg: 12px;
       --border-radius-md: 8px;
       --color-background-primary: #ffffff;
       --color-background-secondary: #f5f5f5;
-      --color-background-info: #dbeafe;
-      --color-background-success: #dcfce7;
-      --color-background-warning: #fef9c3;
-      --color-background-danger: #fee2e2;
       --color-border-secondary: #d1d5db;
       --color-border-tertiary: #e5e7eb;
       --color-text-primary: #111827;
       --color-text-secondary: #6b7280;
-      --color-text-info: #1d4ed8;
-      --color-text-success: #15803d;
-      --color-text-warning: #a16207;
-      --color-text-danger: #b91c1c;
     }
-    body {
-      font-family: var(--font-sans);
-      background: #f0f4f8;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .complaint-form select,
-    .complaint-form textarea,
-    .complaint-form input {
-      padding: 6px 10px;
-      border: 0.5px solid var(--color-border-secondary);
-      border-radius: var(--border-radius-md);
-      font-family: var(--font-sans);
-    }
-    .sub-btn:hover { background: #1a6bbf; }
-    .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
-    .city-grid { max-height: 300px; overflow-y: auto; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 8px; margin-top: 8px; }
-    .city-tag { display: inline-block; padding: 2px 8px; background: var(--color-background-primary); border-radius: 12px; font-size: 10px; margin: 2px; border: 0.5px solid var(--color-border-tertiary); }
-    .map-container { position: relative; background: #e8f4f8; border-radius: var(--border-radius-lg); overflow: hidden; }
-    .custom-map { width: 100%; height: 400px; background: linear-gradient(135deg, #c8e6f0 0%, #a8d5e5 100%); position: relative; }
-    .city-marker { position: absolute; width: 8px; height: 8px; background: #185FA5; border-radius: 50%; cursor: pointer; transition: all 0.2s; }
-    .city-marker:hover { transform: scale(2); background: #A32D2D; }
-    .city-label { position: absolute; font-size: 8px; background: rgba(5,14,31,0.7); color: white; padding: 1px 4px; border-radius: 3px; white-space: nowrap; }
+    body { font-family: var(--font-sans); background: #f0f4f8; padding: 1rem; }
+    .app { max-width: 1400px; margin: 0 auto; }
+    .hdr { background: #050e1f; border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 10px; }
+    .hdr-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .sat-ring { width: 48px; height: 48px; border-radius: 50%; border: 2px solid #378ADD; display: flex; align-items: center; justify-content: center; position: relative; }
+    .sat-ring i { font-size: 20px; color: #85B7EB; }
+    .hdr h1 { font-size: 18px; font-weight: 600; color: #fff; }
+    .hdr p { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+    .sat-status { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 10px; }
+    .sstat { display: flex; align-items: center; gap: 5px; font-size: 11px; color: rgba(255,255,255,0.6); }
+    .sstat-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .pulse { animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+    .lang-row { display: flex; gap: 5px; flex-wrap: wrap; }
+    .lb { padding: 3px 9px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.25); background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.8); font-size: 11px; cursor: pointer; }
+    .lb.on { background: #378ADD; color: #fff; border-color: #378ADD; }
+    .nav { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; overflow-x: auto; padding-bottom: 5px; }
+    .nb { padding: 6px 11px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); font-size: 11px; color: var(--color-text-secondary); cursor: pointer; display: flex; align-items: center; gap: 4px; }
+    .nb.on { background: #185FA5; color: #fff; border-color: #185FA5; }
+    .panel { display: none; }
+    .panel.on { display: block; }
+    .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem; margin-bottom: 10px; }
+    .ct { font-size: 11px; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+    .g2, .g3, .g4, .g5 { display: grid; gap: 8px; margin-bottom: 10px; }
+    .g2 { grid-template-columns: repeat(2,1fr); }
+    .g3 { grid-template-columns: repeat(3,1fr); }
+    .g4 { grid-template-columns: repeat(4,1fr); }
+    .g5 { grid-template-columns: repeat(5,1fr); }
+    .stat { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; }
+    .sl { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 3px; }
+    .sv { font-size: 20px; font-weight: 500; color: var(--color-text-primary); }
+    .su { font-size: 11px; color: var(--color-text-secondary); }
+    .row { display: flex; align-items: center; padding: 7px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+    .badge { padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 500; }
+    .bb { background: #B5D4F4; color: #042C53; }
+    .gb { background: #C0DD97; color: #173404; }
+    .rb { background: #F7C1C1; color: #501313; }
+    .ab { background: #FAC775; color: #412402; }
+    .pb { background: #CECBF6; color: #26215C; }
+    .tb { background: #9FE1CB; color: #04342C; }
+    .city-grid { max-height: 400px; overflow-y: auto; background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px; }
+    .city-tag { display: inline-block; padding: 3px 10px; background: var(--color-background-primary); border-radius: 16px; font-size: 10px; margin: 3px; border: 0.5px solid var(--color-border-tertiary); cursor: pointer; transition: all 0.2s; }
+    .city-tag:hover { background: #185FA5; color: white; }
+    .bus-card, .train-card, .hospital-card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px; margin-bottom: 8px; }
+    .progress-bar { height: 4px; background: var(--color-background-secondary); border-radius: 2px; overflow: hidden; margin: 6px 0; }
+    .progress-fill { height: 100%; border-radius: 2px; }
+    .live-ticker { background: #050e1f; border-radius: var(--border-radius-md); padding: 8px 12px; margin-bottom: 10px; overflow: hidden; }
+    .ticker-inner { display: flex; gap: 30px; animation: ticker 30s linear infinite; white-space: nowrap; }
+    @keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    .ticker-item { font-size: 11px; color: rgba(255,255,255,0.7); display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .india-map-svg { width: 100%; height: 450px; background: #e8f4f8; border-radius: var(--border-radius-lg); }
+    .search-box { width: 100%; padding: 8px 12px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); margin-bottom: 10px; font-size: 12px; }
+    .stats-row { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+    .sub-btn { padding: 8px 18px; background: #185FA5; color: #fff; border: none; border-radius: var(--border-radius-md); font-size: 13px; cursor: pointer; font-weight: 500; }
+    .smsg { background: #EAF3DE; border: 0.5px solid #C0DD97; border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 13px; color: #173404; display: none; }
+    @media (max-width: 768px) { .g2, .g3, .g4, .g5 { grid-template-columns: repeat(2,1fr); } }
   </style>
 </head>
 <body>
 
-<div class="app" style="max-width: 780px;">
-<h2 class="sr-only">Smart City QR Pole – satellite-connected live tracking system covering 5000+ cities across Tamil Nadu, Puducherry, and South India</h2>
-
-<div class="hdr">
-  <div class="hdr-top">
-    <div class="sat-ring"><i class="ti ti-antenna" aria-hidden="true"></i></div>
-    <div>
-      <h1 id="ht">Smart City QR Pole · Satellite Command</h1>
-      <p id="hs">ISRO NavIC + GPS · Connected · Tamil Nadu & Puducherry Coverage · Pole ID: TN-MAIN-0001</p>
+<div class="app">
+  <div class="hdr">
+    <div class="hdr-top">
+      <div class="sat-ring"><i class="ti ti-antenna"></i></div>
+      <div>
+        <h1>🇮🇳 Smart City QR Pole · ALL India Command Center</h1>
+        <p>ISRO NavIC + GPS + GLONASS · 28 States · 8 UTs · 10,000+ Cities · Live Pan-India Tracking</p>
+      </div>
+    </div>
+    <div class="sat-status">
+      <div class="sstat"><div class="sstat-dot pulse" style="background:#639922"></div><span>NavIC: 7 satellites</span></div>
+      <div class="sstat"><div class="sstat-dot pulse" style="background:#378ADD"></div><span>GPS: 24 satellites</span></div>
+      <div class="sstat"><div class="sstat-dot pulse" style="background:#EF9F27"></div><span>Signal: 99.2%</span></div>
+      <div class="sstat"><div class="sstat-dot" style="background:#5DCAA5"></div><span>Coverage: 100% India</span></div>
+    </div>
+    <div class="lang-row">
+      <button class="lb on" onclick="setLanguage('en')">🇬🇧 English</button>
+      <button class="lb" onclick="setLanguage('hi')">🇮🇳 हिंदी</button>
+      <button class="lb" onclick="setLanguage('ta')">🌺 தமிழ்</button>
+      <button class="lb" onclick="setLanguage('te')">🏵️ తెలుగు</button>
+      <button class="lb" onclick="setLanguage('bn')">🐟 বাংলা</button>
+      <button class="lb" onclick="setLanguage('mr')">🦋 मराठी</button>
+      <button class="lb" onclick="setLanguage('kn')">🐘 ಕನ್ನಡ</button>
+      <button class="lb" onclick="setLanguage('ml')">🌴 മലയാളം</button>
+      <button class="lb" onclick="setLanguage('gu')">🦁 ગુજરાતી</button>
+      <button class="lb" onclick="setLanguage('pa')">🌾 ਪੰਜਾਬੀ</button>
     </div>
   </div>
-  <div class="sat-status">
-    <div class="sstat"><div class="sstat-dot pulse" style="background:#639922"></div><span id="ss1">NavIC satellite: LIVE</span></div>
-    <div class="sstat"><div class="sstat-dot pulse" style="background:#378ADD"></div><span id="ss2">GPS lock: 14 sats</span></div>
-    <div class="sstat"><div class="sstat-dot pulse" style="background:#EF9F27"></div><span id="ss3">Signal: 98.7%</span></div>
-    <div class="sstat"><div class="sstat-dot" style="background:#5DCAA5"></div><span id="ss4">Last sync: 1s ago</span></div>
+
+  <div class="live-ticker" id="ticker"><div class="ticker-inner" id="tickerInner"></div></div>
+
+  <div class="nav">
+    <button class="nb on" onclick="showPanel('dashboard')"><i class="ti ti-dashboard"></i><span>Dashboard</span></button>
+    <button class="nb" onclick="showPanel('map')"><i class="ti ti-map-2"></i><span>India Map</span></button>
+    <button class="nb" onclick="showPanel('buses')"><i class="ti ti-bus"></i><span>Buses (52,847)</span></button>
+    <button class="nb" onclick="showPanel('trains')"><i class="ti ti-train"></i><span>Trains (12,456)</span></button>
+    <button class="nb" onclick="showPanel('hospitals')"><i class="ti ti-building-hospital"></i><span>Hospitals (25,891)</span></button>
+    <button class="nb" onclick="showPanel('emergency')"><i class="ti ti-phone-call"></i><span>Emergency</span></button>
+    <button class="nb" onclick="showPanel('satellite')"><i class="ti ti-antenna"></i><span>Satellite</span></button>
+    <button class="nb" onclick="showPanel('weather')"><i class="ti ti-cloud"></i><span>Weather</span></button>
+    <button class="nb" onclick="showPanel('cities')"><i class="ti ti-building"></i><span>10,847 Cities</span></button>
+    <button class="nb" onclick="showPanel('routes')"><i class="ti ti-road"></i><span>All Routes</span></button>
+    <button class="nb" onclick="showPanel('alerts')"><i class="ti ti-speakerphone"></i><span>Alerts</span></button>
+    <button class="nb" onclick="showPanel('features')"><i class="ti ti-star"></i><span>20+ Features</span></button>
+    <button class="nb" onclick="showPanel('complaint')"><i class="ti ti-message-circle"></i><span>Complaint</span></button>
   </div>
-  <div class="lang-row">
-    <button class="lb on" onclick="setL('en',this)">🇬🇧 EN</button>
-    <button class="lb" onclick="setL('ta',this)">🌺 தமிழ்</button>
-    <button class="lb" onclick="setL('hi',this)">🇮🇳 हिंदी</button>
-    <button class="lb" onclick="setL('fr',this)">🇫🇷 FR</button>
-  </div>
-</div>
 
-<div class="live-ticker" id="ticker">
-  <div class="ticker-inner" id="tickerInner"></div>
-</div>
-
-<div class="nav">
-  <button class="nb on" onclick="showP('map',this)"><i class="ti ti-map-2"></i><span id="n1">Cities Map</span></button>
-  <button class="nb" onclick="showP('bus',this)"><i class="ti ti-bus"></i><span id="n2">Bus Track</span></button>
-  <button class="nb" onclick="showP('train',this)"><i class="ti ti-train"></i><span id="n3">Trains</span></button>
-  <button class="nb" onclick="showP('hospital',this)"><i class="ti ti-building-hospital"></i><span id="n4">Hospitals</span></button>
-  <button class="nb" onclick="showP('emergency',this)"><i class="ti ti-phone-call"></i><span id="n5">Emergency</span></button>
-  <button class="nb" onclick="showP('satellite',this)"><i class="ti ti-antenna"></i><span id="n6">Satellite</span></button>
-  <button class="nb" onclick="showP('weather',this)"><i class="ti ti-cloud"></i><span id="n7">Weather</span></button>
-  <button class="nb" onclick="showP('tourism',this)"><i class="ti ti-camera"></i><span id="n8">Tourism</span></button>
-  <button class="nb" onclick="showP('cities',this)"><i class="ti ti-building"></i><span id="n12">5000+ Cities</span></button>
-  <button class="nb" onclick="showP('announce',this)"><i class="ti ti-speakerphone"></i><span id="n10">Alerts</span></button>
-  <button class="nb" onclick="showP('complaint',this)"><i class="ti ti-message-circle"></i><span id="n11">Complaint</span></button>
-</div>
-
-<!-- Cities Map Panel -->
-<div id="p-map" class="panel on">
-  <div class="map-container">
-    <div class="custom-map" id="citiesMap" style="position: relative;">
-      <!-- Dynamic city markers will be added via JS -->
+  <!-- DASHBOARD PANEL -->
+  <div id="panel-dashboard" class="panel on">
+    <div class="g4">
+      <div class="stat"><div class="sl">🚍 Active Buses</div><div class="sv">52,847</div><div class="su">Across 28 states</div></div>
+      <div class="stat"><div class="sl">🚆 Active Trains</div><div class="sv">12,456</div><div class="su">Daily services</div></div>
+      <div class="stat"><div class="sl">🏥 Hospitals</div><div class="sv">25,891</div><div class="su">Live bed status</div></div>
+      <div class="stat"><div class="sl">📍 Cities Covered</div><div class="sv">10,847</div><div class="su">Pan-India</div></div>
     </div>
-    <div class="map-ctrl">
-      <button class="mc on" onclick="showAllCities()"><i class="ti ti-map"></i> All Cities</button>
-      <button class="mc" onclick="zoomTamilNadu()"><i class="ti ti-map-pin"></i> Tamil Nadu</button>
-      <button class="mc" onclick="zoomPuducherry()"><i class="ti ti-map-pin"></i> Puducherry</button>
-      <span id="city-info" style="font-size:11px;color:var(--color-text-secondary);margin-left:auto;align-self:center">📍 5,124 cities tracked</span>
+    <div class="g4">
+      <div class="stat"><div class="sl">🛣️ Bus Routes</div><div class="sv">18,342</div><div class="su">Intercity + Intracity</div></div>
+      <div class="stat"><div class="sl">🛤️ Train Routes</div><div class="sv">7,421</div><div class="su">All India Railways</div></div>
+      <div class="stat"><div class="sl">🚑 Ambulances</div><div class="sv">8,234</div><div class="su">GPS tracked</div></div>
+      <div class="stat"><div class="sl">📡 QR Poles</div><div class="sv">45,892</div><div class="su">Smart city network</div></div>
     </div>
-  </div>
-  <div class="g4">
-    <div class="stat"><div class="sl" id="ms1">Active buses</div><div class="sv" id="msv1">5,000+</div></div>
-    <div class="stat"><div class="sl" id="ms2">Active trains</div><div class="sv" id="msv2">1,042</div></div>
-    <div class="stat"><div class="sl" id="ms3">QR poles</div><div class="sv" id="msv3">12,450</div></div>
-    <div class="stat"><div class="sl" id="ms4">Cities covered</div><div class="sv" id="msv4">5,124</div></div>
-  </div>
-</div>
-
-<!-- Bus Panel -->
-<div id="p-bus" class="panel">
-  <div class="g3">
-    <div class="stat"><div class="sl">Live routes</div><div class="sv">247</div></div>
-    <div class="stat"><div class="sl">On time</div><div class="sv">86%</div></div>
-    <div class="stat"><div class="sl">Avg occupancy</div><div class="sv">58%</div></div>
-  </div>
-  <div class="card">
-    <div class="ct"><i class="ti ti-bus"></i><span>Live Bus Tracking · 5,000+ Buses Active</span></div>
-    <div style="margin-bottom:10px;font-size:12px;color:var(--color-text-secondary)"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#639922;animation:pulse 1.5s infinite;margin-right:5px"></span><span>ISRO NavIC feed · updates every 10s · 5,247 buses online</span></div>
-    <div id="busListEl"></div>
-    <div style="text-align:center;margin-top:8px"><span class="badge bb">🚍 Total Active Buses: 5,247</span></div>
-  </div>
-</div>
-
-<!-- Train Panel -->
-<div id="p-train" class="panel">
-  <div class="card">
-    <div class="ct"><i class="ti ti-train"></i><span>Live Train Status · 1,042 Trains Active</span></div>
-    <div id="trainListEl"></div>
-  </div>
-  <div class="g3">
-    <div class="stat"><div class="sl">Trains running</div><div class="sv">1,042</div></div>
-    <div class="stat"><div class="sl">On schedule</div><div class="sv">78%</div></div>
-    <div class="stat"><div class="sl">Delayed</div><div class="sv">22%</div></div>
-  </div>
-</div>
-
-<!-- Hospitals Panel -->
-<div id="p-hospital" class="panel">
-  <div class="g3">
-    <div class="stat"><div class="sl">Total hospitals</div><div class="sv">847</div></div>
-    <div class="stat"><div class="sl">Beds available</div><div class="sv">12,418</div></div>
-    <div class="stat"><div class="sl">Ambulances</div><div class="sv">324</div></div>
-  </div>
-  <div class="card"><div class="ct"><i class="ti ti-building-hospital"></i><span>Hospitals Across TN & Puducherry</span></div><div id="hospListEl"></div></div>
-</div>
-
-<!-- Emergency Panel -->
-<div id="p-emergency" class="panel">
-  <div class="emer-strip">
-    <div style="font-size:12px;font-weight:500;color:#501313;margin-bottom:8px">Emergency Helplines · Tamil Nadu & India</div>
-    <div class="emer-grid">
-      <div class="emer-item"><div class="emer-num">100</div><div class="emer-lbl">Police</div></div>
-      <div class="emer-item"><div class="emer-num">108</div><div class="emer-lbl">Ambulance</div></div>
-      <div class="emer-item"><div class="emer-num">101</div><div class="emer-lbl">Fire</div></div>
-      <div class="emer-item"><div class="emer-num">1091</div><div class="emer-lbl">Women</div></div>
-      <div class="emer-item"><div class="emer-num">1098</div><div class="emer-lbl">Child</div></div>
-      <div class="emer-item"><div class="emer-num">1077</div><div class="emer-lbl">Disaster</div></div>
-      <div class="emer-item"><div class="emer-num">102</div><div class="emer-lbl">Maternity</div></div>
-      <div class="emer-item"><div class="emer-num">112</div><div class="emer-lbl">All Emergencies</div></div>
+    <div class="card">
+      <div class="ct"><i class="ti ti-chart-bar"></i><span>Live Pan-India Statistics</span></div>
+      <div class="stats-row">
+        <span class="badge bb">🚍 Buses on road: 52,847</span>
+        <span class="badge gb">🚆 Trains running: 12,456</span>
+        <span class="badge tb">🏥 Available beds: 128,456</span>
+        <span class="badge ab">🚑 Active ambulances: 8,234</span>
+        <span class="badge pb">📡 Live QR scans: 2.4M/day</span>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Satellite Panel -->
-<div id="p-satellite" class="panel">
-  <div class="sat-panel">
-    <div style="font-size:13px;font-weight:500;color:#85B7EB;margin-bottom:12px"><i class="ti ti-antenna"></i> Satellite Connection · ISRO NavIC</div>
-    <div class="sat-grid">
-      <div class="sat-card"><div class="sat-label">Satellites locked</div><div class="sat-val">14</div><div class="sat-sub">NavIC + GPS</div></div>
-      <div class="sat-card"><div class="sat-label">Signal strength</div><div class="sat-val" id="sigVal">98.7%</div><div class="sat-sub">Excellent</div></div>
-      <div class="sat-card"><div class="sat-label">Location accuracy</div><div class="sat-val">±0.8m</div><div class="sat-sub">Sub-meter</div></div>
-      <div class="sat-card"><div class="sat-label">Data uplink</div><div class="sat-val" id="uplinkVal">156 Mbps</div><div class="sat-sub">Ku-band</div></div>
-      <div class="sat-card"><div class="sat-label">Latitude</div><div class="sat-val">10.79°N</div><div class="sat-sub">Chennai</div></div>
-      <div class="sat-card"><div class="sat-label">Longitude</div><div class="sat-val">79.14°E</div><div class="sat-sub">IST +5:30</div></div>
+  <!-- INDIA MAP PANEL -->
+  <div id="panel-map" class="panel">
+    <div class="card">
+      <div class="ct"><i class="ti ti-map-2"></i><span>Complete India Map with All Routes</span></div>
+      <svg class="india-map-svg" viewBox="0 0 800 700" xmlns="http://www.w3.org/2000/svg">
+        <rect width="800" height="700" fill="#d4e8f5" rx="10"/>
+        <!-- India outline -->
+        <polygon points="400,30 450,50 480,45 520,55 560,60 580,80 590,110 585,140 575,170 560,195 545,220 530,250 520,280 515,310 510,340 505,370 500,400 490,430 480,450 465,470 450,490 435,510 420,530 410,550 395,570 380,580 365,590 350,595 335,590 320,580 310,565 300,545 290,520 280,495 270,470 260,445 250,420 240,395 235,370 230,345 225,320 220,295 215,270 210,245 215,220 225,200 240,185 260,175 280,165 300,155 320,140 340,120 355,100 365,75 375,50 385,35 400,30" fill="#c8e0b0" stroke="#8ab870" stroke-width="1.5"/>
+        <!-- Major route lines -->
+        <g id="main-routes">
+          <line x1="160" y1="120" x2="400" y2="200" x3="600" y3="350" stroke="#185FA5" stroke-width="1.5" stroke-dasharray="8,4" class="route-line"/>
+          <line x1="200" y1="300" x2="400" y2="400" x3="550" y3="500" stroke="#A32D2D" stroke-width="1.5" stroke-dasharray="8,4" class="route-line"/>
+          <line x1="300" y1="80" x2="450" y2="250" x3="500" y3="450" stroke="#534AB7" stroke-width="1.5" stroke-dasharray="8,4" class="route-line"/>
+          <line x1="350" y1="550" x2="450" y2="450" x3="550" y3="350" stroke="#BA7517" stroke-width="1.5" stroke-dasharray="8,4" class="route-line"/>
+          <line x1="150" y1="400" x2="300" y2="500" x3="450" y3="580" stroke="#0F6E56" stroke-width="1.5" stroke-dasharray="8,4" class="route-line"/>
+        </g>
+        <!-- Major cities -->
+        <g font-size="8" fill="#1a3a5c" font-weight="500">
+          <circle cx="580" cy="120" r="4" fill="#185FA5"/><text x="585" y="118">Guwahati</text>
+          <circle cx="160" cy="120" r="4" fill="#185FA5"/><text x="140" y="118">Srinagar</text>
+          <circle cx="210" cy="200" r="4" fill="#185FA5"/><text x="195" y="198">Chandigarh</text>
+          <circle cx="280" cy="180" r="5" fill="#185FA5"/><text x="265" y="178">Delhi</text>
+          <circle cx="360" cy="250" r="4" fill="#185FA5"/><text x="345" y="248">Jaipur</text>
+          <circle cx="500" cy="300" r="5" fill="#185FA5"/><text x="490" y="298">Kolkata</text>
+          <circle cx="320" cy="370" r="5" fill="#185FA5"/><text x="305" y="368">Mumbai</text>
+          <circle cx="420" cy="400" r="4" fill="#185FA5"/><text x="408" y="398">Hyderabad</text>
+          <circle cx="450" cy="500" r="5" fill="#185FA5"/><text x="440" y="498">Chennai</text>
+          <circle cx="380" cy="490" r="4" fill="#185FA5"/><text x="365" y="488">Bengaluru</text>
+          <circle cx="480" cy="450" r="4" fill="#185FA5"/><text x="468" y="448">Visakhapatnam</text>
+          <circle cx="350" cy="560" r="4" fill="#185FA5"/><text x="338" y="558">Thiruvananthapuram</text>
+          <circle cx="440" cy="480" r="3" fill="#185FA5"/><text x="430" y="478">Puducherry</text>
+          <circle cx="330" cy="430" r="3" fill="#185FA5"/><text x="318" y="428">Pune</text>
+          <circle cx="550" cy="380" r="3" fill="#185FA5"/><text x="540" y="378">Bhubaneswar</text>
+          <circle cx="250" cy="300" r="3" fill="#185FA5"/><text x="238" y="298">Ahmedabad</text>
+          <circle cx="440" cy="350" r="3" fill="#185FA5"/><text x="432" y="348">Nagpur</text>
+          <circle cx="400" cy="320" r="3" fill="#185FA5"/><text x="388" y="318">Bhopal</text>
+          <circle cx="350" cy="310" r="3" fill="#185FA5"/><text x="340" y="308">Indore</text>
+          <circle cx="500" cy="350" r="3" fill="#185FA5"/><text x="490" y="348">Raipur</text>
+          <circle cx="300" cy="420" r="3" fill="#185FA5"/><text x="288" y="418">Goa</text>
+        </g>
+        <rect x="10" y="10" width="200" height="85" rx="6" fill="rgba(5,14,31,0.85)"/>
+        <text x="18" y="28" font-size="11" fill="#85B7EB" font-weight="bold">🗺️ ALL INDIA ROUTES</text>
+        <text x="18" y="44" font-size="9" fill="#ddd">🚍 Bus Routes: 18,342</text>
+        <text x="18" y="58" font-size="9" fill="#ddd">🚆 Train Routes: 7,421</text>
+        <text x="18" y="72" font-size="9" fill="#ddd">🏥 Hospitals: 25,891</text>
+        <text x="18" y="86" font-size="9" fill="#ddd">📍 Cities: 10,847</text>
+      </svg>
     </div>
   </div>
-  <div class="qr-connect">
-    <div class="qr-info"><h3>QR → Satellite Connection</h3><p>Scanning this QR code syncs your phone to the pole's satellite uplink for real-time tracking across all 5,124 cities.</p></div>
-  </div>
-</div>
 
-<!-- Weather Panel -->
-<div id="p-weather" class="panel">
-  <div class="g2">
-    <div class="card"><div class="ct"><i class="ti ti-thermometer"></i><span>Temperature</span></div><div class="weather-big">33°C</div><div style="font-size:13px;color:var(--color-text-secondary)">Partly Cloudy · Chennai</div></div>
-    <div class="card"><div class="ct"><i class="ti ti-leaf"></i><span>Air Quality</span></div><div style="font-size:38px;font-weight:500;color:#BA7517">92</div><div>Moderate</div></div>
-  </div>
-</div>
-
-<!-- Tourism Panel -->
-<div id="p-tourism" class="panel">
-  <div class="card">
-    <div class="ct"><i class="ti ti-camera"></i><span>Tourist Attractions · Tamil Nadu & Puducherry</span></div>
-    <div class="tour-c"><div class="tour-ic">🏛️</div><div><div class="tour-name">Chennai - Marina Beach</div><div class="tour-desc">Second longest beach in the world, iconic landmark of Chennai</div></div></div>
-    <div class="tour-c"><div class="tour-ic">🏯</div><div><div class="tour-name">Puducherry - French Quarter</div><div class="tour-desc">Beautiful colonial architecture, Auroville, and serene beaches</div></div></div>
-    <div class="tour-c"><div class="tour-ic">🛕</div><div><div class="tour-name">Thanjavur - Brihadeeswarar Temple</div><div class="tour-desc">UNESCO World Heritage site, magnificent Chola architecture</div></div></div>
-    <div class="tour-c"><div class="tour-ic">🙏</div><div><div class="tour-name">Thiruvannamalai - Arunachaleswarar Temple</div><div class="tour-desc">One of the largest temples in India, sacred Annamalaiyar Hill</div></div></div>
-    <div class="tour-c"><div class="tour-ic">🌊</div><div><div class="tour-name">Kumbakonam - Mahamaham Tank</div><div class="tour-desc">Famous temple town, known for its 18 temples and festival</div></div></div>
-    <div class="tour-c"><div class="tour-ic">🌿</div><div><div class="tour-name">Hosur - Hogenakkal Falls</div><div class="tour-desc">"Niagara of India", stunning waterfalls on Kaveri river</div></div></div>
-  </div>
-</div>
-
-<!-- 5000+ Cities Panel -->
-<div id="p-cities" class="panel">
-  <div class="card">
-    <div class="ct"><i class="ti ti-building"></i><span>5,124 Cities · Complete Coverage</span></div>
-    <div class="g3" style="margin-bottom:10px">
-      <div class="stat"><div class="sl">Tamil Nadu</div><div class="sv">2,847</div></div>
-      <div class="stat"><div class="sl">Puducherry</div><div class="sv">98</div></div>
-      <div class="stat"><div class="sl">Other South India</div><div class="sv">2,179</div></div>
+  <!-- BUSES PANEL - ALL INDIA -->
+  <div id="panel-buses" class="panel">
+    <div class="g3">
+      <div class="stat"><div class="sl">Total Buses</div><div class="sv">52,847</div></div>
+      <div class="stat"><div class="sl">States Covered</div><div class="sv">28 + 8 UTs</div></div>
+      <div class="stat"><div class="sl">On-Time Performance</div><div class="sv">84%</div></div>
     </div>
-    <div class="city-grid" id="cityGridList"></div>
-    <div style="margin-top:10px;text-align:center"><span class="badge gb">📍 Live tracking across all 5,124 cities</span></div>
-  </div>
-</div>
-
-<!-- Announcements Panel -->
-<div id="p-announce" class="panel">
-  <div class="card">
-    <div class="ct"><i class="ti ti-speakerphone"></i><span>Government Alerts · Live Broadcast</span></div>
-    <div class="ann-item"><span class="ann-tag">Transport</span><div class="ann-text">Chennai Metro expansion: New line from Washermanpet to Light House opens May 15</div><div class="ann-date">Today · CMRL</div></div>
-    <div class="ann-item"><span class="ann-tag">Weather</span><div class="ann-text">Southwest monsoon expected June 1 · Heavy rainfall alert for coastal TN</div><div class="ann-date">May 6 · IMD</div></div>
-    <div class="ann-item"><span class="ann-tag">Tourism</span><div class="ann-text">Puducherry Beach Festival 2024 · May 20-25 · Free entry for all</div><div class="ann-date">May 5 · Tourism Dept</div></div>
-  </div>
-</div>
-
-<!-- Complaint Panel -->
-<div id="p-complaint" class="panel">
-  <div class="card">
-    <div class="ct"><i class="ti ti-message-circle"></i><span>Complaint / Feedback · Satellite Logged</span></div>
-    <div class="complaint-form">
-      <select id="ccat"><option>Select category...</option><option>Road / Infrastructure</option><option>Water Supply</option><option>Electricity</option><option>Garbage / Sanitation</option><option>Public Safety</option><option>Transport / Bus/Train</option><option>Satellite Pole Issue</option></select>
-      <input type="text" id="cname" placeholder="Your name (optional)">
-      <input type="tel" id="cphone" placeholder="Phone number">
-      <textarea id="cdesc" placeholder="Describe your complaint or feedback..."></textarea>
-      <button class="sub-btn" onclick="submitC()">Submit · Satellite Logged</button>
-      <div class="smsg" id="smsg">Complaint submitted via satellite. Reference: <strong id="refid"></strong> · Response within 2 hrs</div>
+    <div class="card">
+      <div class="ct"><i class="ti ti-bus"></i><span>Live Buses Across India · GPS Tracked</span></div>
+      <input type="text" class="search-box" id="busSearch" placeholder="🔍 Search bus by number, route, or city..." onkeyup="filterBuses()">
+      <div id="allBusesList" style="max-height: 500px; overflow-y: auto;"></div>
     </div>
   </div>
-</div>
-</div>
 
-<script>
-// Major cities dataset - 100+ key cities, system says "5000+ cities covered"
-const majorCities = [
-  "Chennai", "Puducherry", "Kumbakonam", "Thanjavur", "Jayankondam", "Thiruvannamalai", "Hosur", "Villupuram",
-  "Coimbatore", "Madurai", "Tiruchirappalli", "Salem", "Tirunelveli", "Vellore", "Erode", "Tiruppur",
-  "Dindigul", "Kanchipuram", "Cuddalore", "Karaikudi", "Nagapattinam", "Kanyakumari", "Nagercoil", "Tuticorin",
-  "Kovilpatti", "Sivakasi", "Rajapalayam", "Pudukkottai", "Karur", "Namakkal", "Dharmapuri", "Krishnagiri",
-  "Ramanathapuram", "Sivaganga", "Virudhunagar", "Theni", "Bodinayakkanur", "Ooty", "Kodaikanal", "Yercaud",
-  "Pollachi", "Palani", "Chidambaram", "Mayiladuthurai", "Tiruvarur", "Mannargudi", "Pattukkottai", "Ariyalur",
-  "Perambalur", "Vriddhachalam", "Tindivanam", "Gingee", "Arani", "Cheyyar", "Wandiwash", "Tiruvannamalai",
-  "Chengam", "Polur", "Vandavasi", "Madurantakam", "Chengalpattu", "Tambaram", "Avadi", "Ambattur", "Poonamallee",
-  "Sriperumbudur", "Kancheepuram", "Uthiramerur", "Wallajah", "Ranipet", "Walajapet", "Arcot", "Vellore",
-  "Gudiyatham", "Ambur", "Vaniyambadi", "Jolarpet", "Tirupattur", "Krishnagiri", "Hosur", "Denkanikottai",
-  "Palakkodu", "Harur", "Dharmapuri", "Mettur", "Omalur", "Attur", "Rasipuram", "Namakkal", "Tiruchengode",
-  "Sankari", "Edappadi", "Mettur Dam", "Bhavani", "Gobichettipalayam", "Sathyamangalam", "Perundurai", "Kangeyam",
-  "Dharapuram", "Udumalaipettai", "Valparai", "Anaimalai", "Kinathukadavu", "Mettupalayam", "Coonoor", "Kotagiri",
-  "Gudalur", "Pandalur", "Nelliyalam", "Kaveripattinam", "Krishnagiri", "Rayakottai", "Kelamangalam", "Thally"
-];
+  <!-- TRAINS PANEL - ALL INDIA -->
+  <div id="panel-trains" class="panel">
+    <div class="g3">
+      <div class="stat"><div class="sl">Total Trains</div><div class="sv">12,456</div></div>
+      <div class="stat"><div class="sl">Daily Passengers</div><div class="sv">23.5M</div></div>
+      <div class="stat"><div class="sl">Train Routes</div><div class="sv">7,421</div></div>
+    </div>
+    <div class="card">
+      <div class="ct"><i class="ti ti-train"></i><span>Live Trains Across India · IRCTC Integration</span></div>
+      <input type="text" class="search-box" id="trainSearch" placeholder="🔍 Search train number, name, or route..." onkeyup="filterTrains()">
+      <div id="allTrainsList" style="max-height: 500px; overflow-y: auto;"></div>
+    </div>
+  </div>
 
-// 50+ buses data (showing representative sample, system says 5000+ active)
-const buses = [];
-for(let i=1; i<=50; i++) {
-  const cities = ["Chennai", "Puducherry", "Kumbakonam", "Thanjavur", "Thiruvannamalai", "Hosur", "Vellore", "Coimbatore", "Madurai", "Trichy"];
-  const from = cities[Math.floor(Math.random() * cities.length)];
-  const to = cities[Math.floor(Math.random() * cities.length)];
-  buses.push({
-    num: `TN${String(38 + Math.floor(Math.random() * 50))}${String.fromCharCode(65 + Math.floor(Math.random() * 26))}`,
-    name: `${from} → ${to}`,
-    via: `via NH${Math.floor(Math.random() * 200)}`,
-    dist: Math.floor(Math.random() * 300) + 10,
-    occ: Math.floor(Math.random() * 100),
-    eta: `${Math.floor(Math.random() * 60) + 1} min`,
-    status: ["On route", "Approaching", "Delayed", "Almost full"][Math.floor(Math.random() * 4)],
-    col: ["#185FA5", "#0F6E56", "#BA7517", "#A32D2D"][Math.floor(Math.random() * 4)],
-    badge: ["bb", "gb", "ab", "rb"][Math.floor(Math.random() * 4)]
-  });
-}
+  <!-- HOSPITALS PANEL - ALL INDIA -->
+  <div id="panel-hospitals" class="panel">
+    <div class="g4">
+      <div class="stat"><div class="sl">Total Hospitals</div><div class="sv">25,891</div></div>
+      <div class="stat"><div class="sl">Available Beds</div><div class="sv">128,456</div></div>
+      <div class="stat"><div class="sl">ICUs</div><div class="sv">12,847</div></div>
+      <div class="stat"><div class="sl">Ambulances</div><div class="sv">8,234</div></div>
+    </div>
+    <div class="card">
+      <div class="ct"><i class="ti ti-building-hospital"></i><span>Hospitals Across India · Live Bed Status</span></div>
+      <input type="text" class="search-box" id="hospitalSearch" placeholder="🔍 Search hospital by name, city, or state..." onkeyup="filterHospitals()">
+      <div id="allHospitalsList" style="max-height: 500px; overflow-y: auto;"></div>
+    </div>
+  </div>
 
-// Trains - 30+ sample, system says 1042 active
-const trains = [];
-const trainNames = ["Chennai Express", "Puducherry SF Express", "Kumbakonam Passenger", "Thanjavur Express", "Rockfort Express", "Vaigai Express", "Pandian Express", "Nellai Express", "Kovai Express", "Cheran Express", "Cholan Express", "Pallavan Express", "Brindavan Express", "Shatabdi Express", "Duronto Express"];
-for(let i=1; i<=35; i++) {
-  trains.push({
-    num: String(Math.floor(Math.random() * 90000) + 10000),
-    name: trainNames[Math.floor(Math.random() * trainNames.length)] + " " + (Math.floor(Math.random() * 9000) + 1000),
-    via: ["via Katpadi", "via Villupuram", "via Tiruchchirapalli", "via Erode", "via Salem"][Math.floor(Math.random() * 5)],
-    eta: `${Math.floor(Math.random() * 23)}:${String(Math.floor(Math.random() * 60)).padStart(2,'0')}`,
-    plat: String(Math.floor(Math.random() * 6) + 1),
-    status: ["On time", "On time", "5 min late", "10 min late", "Delayed"][Math.floor(Math.random() * 5)],
-    delay: Math.random() > 0.7 ? String(Math.floor(Math.random() * 25)) : "—",
-    badge: ["gb", "gb", "ab", "rb"][Math.floor(Math.random() * 4)]
-  });
-}
+  <!-- EMERGENCY PANEL -->
+  <div id="panel-emergency" class="panel">
+    <div class="card">
+      <div class="ct"><i class="ti ti-phone-call"></i><span>National Emergency Helplines</span></div>
+      <div class="g3">
+        <div class="stat"><div class="sv">112</div><div class="sl">Emergency Response</div></div>
+        <div class="stat"><div class="sv">100</div><div class="sl">Police</div></div>
+        <div class="stat"><div class="sv">108</div><div class="sl">Ambulance</div></div>
+        <div class="stat"><div class="sv">101</div><div class="sl">Fire</div></div>
+        <div class="stat"><div class="sv">1091</div><div class="sl">Women Helpline</div></div>
+        <div class="stat"><div class="sv">1098</div><div class="sl">Child Helpline</div></div>
+        <div class="stat"><div class="sv">1077</div><div class="sl">Disaster Management</div></div>
+        <div class="stat"><div class="sv">1916</div><div class="sl">Railway Helpline</div></div>
+        <div class="stat"><div class="sv">181</div><div class="sl">Women Safety</div></div>
+      </div>
+    </div>
+  </div>
 
-// Hospitals data
-const hospitals = [
-  {name:"Apollo Hospitals Chennai", dist:"0.5 km", beds:"245/650", wait:"~15 min", status:"Open"},
-  {name:"JIPMER Puducherry", dist:"1.2 km", beds:"189/800", wait:"~25 min", status:"Open"},
-  {name:"Government Hospital Kumbakonam", dist:"0.8 km", beds:"67/200", wait:"~20 min", status:"Open"},
-  {name:"Thanjavur Medical College", dist:"1.5 km", beds:"145/450", wait:"~30 min", status:"Open"},
-  {name:"Hosur General Hospital", dist:"0.6 km", beds:"34/120", wait:"~15 min", status:"Open"},
-  {name:"Villupuram District Hospital", dist:"0.9 km", beds:"56/180", wait:"~22 min", status:"Busy"},
-];
+  <!-- SATELLITE PANEL -->
+  <div id="panel-satellite" class="panel">
+    <div class="card">
+      <div class="ct"><i class="ti ti-antenna"></i><span>ISRO NavIC · GPS · GLONASS Satellite Network (India)</span></div>
+      <div class="g4">
+        <div class="stat"><div class="sl">NavIC Satellites</div><div class="sv">7</div><div class="su">Indian Regional System</div></div>
+        <div class="stat"><div class="sl">GPS Satellites</div><div class="sv">24</div><div class="su">Global Coverage</div></div>
+        <div class="stat"><div class="sl">GLONASS</div><div class="sv">24</div><div class="su">Russian System</div></div>
+        <div class="stat"><div class="sl">Total Locked</div><div class="sv" id="totalSat">52</div><div class="su">Multi-constellation</div></div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" style="width:99%; background:#378ADD"></div></div>
+      <div class="stats-row"><span class="badge gb">📍 Accuracy: ±0.5 meters</span><span class="badge bb">📡 Signal: 99.2%</span><span class="badge tb">⚡ Update: Real-time</span></div>
+    </div>
+  </div>
 
-function buildBusList() {
-  const el = document.getElementById('busListEl');
-  el.innerHTML = buses.slice(0,15).map(b => `
-    <div class="bus-card" style="margin-bottom:6px;padding:8px">
-      <div class="bc-head"><div class="bc-num" style="min-width:55px">${b.num}</div><div style="flex:1"><div class="bc-name">${b.name}</div><div style="font-size:10px">${b.via}</div></div><span style="font-size:11px;font-weight:500;color:${b.col}">${b.eta}</span></div>
-      <div class="prog"><div class="prog-f" style="width:${b.occ}%;background:${b.col}"></div></div>
-      <div class="bc-meta"><span class="bc-m"><i class="ti ti-road"></i>${b.dist} km</span><span class="badge ${b.badge}" style="margin-left:auto">${b.status}</span></div>
-    </div>`).join('') + `<div style="text-align:center;margin-top:8px;padding:6px;background:#EAF3DE;border-radius:8px"><i class="ti ti-bus"></i> + ${buses.length - 15} more routes active · Total 5,247 buses online</div>`;
-}
+  <!-- WEATHER PANEL -->
+  <div id="panel-weather" class="panel">
+    <div class="g2">
+      <div class="stat"><div class="sl">Current Temp (Avg India)</div><div class="sv">31°C</div></div>
+      <div class="stat"><div class="sl">Monsoon Status</div><div class="sv">Active</div></div>
+      <div class="stat"><div class="sl">AQI (National Avg)</div><div class="sv">142</div></div>
+      <div class="stat"><div class="sl">Humidity</div><div class="sv">68%</div></div>
+    </div>
+  </div>
 
-function buildTrainList() {
-  const el = document.getElementById('trainListEl');
-  el.innerHTML = trains.slice(0,20).map(t => `
-    <div class="row" style="padding:6px 0"><div style="min-width:55px"><span class="badge bb" style="font-size:9px">${t.num}</span></div>
-    <div style="flex:1;margin:0 6px"><div style="font-size:12px">${t.name}</div><div style="font-size:9px">${t.via} · Plat ${t.plat} · ${t.eta}</div></div>
-    <span class="badge ${t.badge}" style="font-size:10px">${t.status}</span></div>`).join('') + `<div style="text-align:center;margin-top:8px;padding:6px;background:#DBEAFE;border-radius:8px"><i class="ti ti-train"></i> + ${trains.length - 20} more trains · Total 1,042 trains active across TN & Puducherry</div>`;
-}
+  <!-- CITIES PANEL - 10,847 CITIES -->
+  <div id="panel-cities" class="panel">
+    <div class="card">
+      <div class="ct"><i class="ti ti-building"></i><span>10,847 Cities & Towns · Complete Pan-India Coverage</span></div>
+      <div class="g4">
+        <div class="stat"><div class="sl">States/UTs</div><div class="sv">36</div></div>
+        <div class="stat"><div class="sl">Districts</div><div class="sv">766</div></div>
+        <div class="stat"><div class="sl">Cities</div><div class="sv">10,847</div></div>
+        <div class="stat"><div class="sl">Villages Connected</div><div class="sv">597,608</div></div>
+      </div>
+      <input type="text" class="search-box" id="citySearch" placeholder="🔍 Search your city..." onkeyup="filterCities()">
+      <div class="city-grid" id="allCitiesList"></div>
+    </div>
+  </div>
 
-function buildHospList() {
-  const el = document.getElementById('hospListEl');
-  el.innerHTML = hospitals.map(h => `<div class="hosp-card" style="padding:8px;margin-bottom:6px"><div style="display:flex;justify-content:space-between"><span style="font-weight:500">${h.name}</span><span class="badge gb">${h.status}</span></div><div style="font-size:11px;color:var(--color-text-secondary)">${h.dist} · Beds: ${h.beds} · Wait: ${h.wait}</div></div>`).join('');
-}
+  <!-- ALL ROUTES PANEL -->
+  <div id="panel-routes" class="panel">
+    <div class="card">
+      <div class="ct"><i class="ti ti-road"></i><span>Complete Route Network · India</span></div>
+      <div class="g3">
+        <div class="stat"><div class="sl">National Highways</div><div class="sv">151,019 km</div></div>
+        <div class="stat"><div class="sl">Railway Network</div><div class="sv">67,956 km</div></div>
+        <div class="stat"><div class="sl">Bus Routes</div><div class="sv">18,342</div></div>
+        <div class="stat"><div class="sl">Train Services</div><div class="sv">12,456</div></div>
+        <div class="stat"><div class="sl">Metro Cities</div><div class="sv">15</div></div>
+        <div class="stat"><div class="sl">Airports</div><div class="sv">137</div></div>
+      </div>
+    </div>
+  </div>
 
-function buildCityList() {
-  const el = document.getElementById('cityGridList');
-  el.innerHTML = `<div style="font-size:11px;margin-bottom:8px">📌 Showing ${majorCities.length} major cities · System covers 5,124 total cities across Tamil Nadu, Puducherry, and surrounding regions</div>` + 
-    majorCities.map(city => `<span class="city-tag" onclick="cityClick('${city}')">📍 ${city}</span>`).join('');
-}
+  <!-- ALERTS PANEL -->
+  <div id="panel-alerts" class="panel">
+    <div class="card">
+      <div class="ct"><i class="ti ti-speakerphone"></i><span>National Alerts & Announcements</span></div>
+      <div id="alertsList"></div>
+    </div>
+  </div>
 
-function buildMapMarkers() {
-  const mapDiv = document.getElementById('citiesMap');
-  if(!mapDiv) return;
-  // Simplified coordinates for major cities
-  const cityCoords = {
-    "Chennai": {x: 520, y: 310}, "Puducherry": {x: 490, y: 340}, "Kumbakonam": {x: 460, y: 360},
-    "Thanjavur": {x: 455, y: 365}, "Thiruvannamalai": {x: 440, y: 340}, "Hosur": {x: 390, y: 330},
-    "Villupuram": {x: 470, y: 330}, "Coimbatore": {x: 370, y: 360}, "Madurai": {x: 420, y: 390},
-    "Trichy": {x: 440, y: 370}, "Salem": {x: 410, y: 355}, "Vellore": {x: 445, y: 320}
-  };
-  mapDiv.innerHTML = `<svg width="100%" height="100%" viewBox="300 280 300 150" style="background: linear-gradient(135deg, #c8e6f0, #a8d5e5); border-radius:12px">
-    <rect width="600" height="200" fill="url(#bgGrad)" rx="8"/>
-    <defs><linearGradient id="bgGrad"><stop offset="0%" stop-color="#c8e6f0"/><stop offset="100%" stop-color="#90caf9"/></linearGradient></defs>
-    <text x="350" y="295" font-size="10" fill="#1a3a5c" font-weight="bold">🗺️ Tamil Nadu & Puducherry Coverage Map</text>
-    <text x="350" y="310" font-size="8" fill="#2c5282">📍 5,124 cities · Live tracking via satellite</text>`;
-  Object.entries(cityCoords).forEach(([city, coord]) => {
-    mapDiv.innerHTML += `<circle cx="${coord.x}" cy="${coord.y}" r="5" fill="#185FA5" stroke="white" stroke-width="1.5" style="cursor:pointer" onclick="cityClick('${city}')"/>
-      <text x="${coord.x+6}" y="${coord.y+3}" font-size="7" fill="#1a3a5c" font-weight="500">${city}</text>`;
-  });
-  mapDiv.innerHTML += `</svg>`;
-}
-
-function showAllCities() { document.getElementById('city-info').textContent = "📍 5,124 cities · Full
+  <!-- 20+ FEATURES PANEL -->
+  <div id="panel-features" class="panel">
+    <div class="card">
+      <div class="ct"><i class="ti ti-star"></i><span>20+ Advanced Features · Smart City QR Pole System</span></div>
+      <div class="g3">
+        <div class="stat"><span class="badge gb">1️⃣</span><div class="sl">Real-time GPS Tracking</div></div>
+        <div class="stat"><span class="badge bb">2️⃣</span><div class="sl">ISRO NavIC Integration</div></div>
+        <div class="stat"><span class="badge tb">3️⃣</span><div class="sl">Pan-India Route Mapping</div></div>
+        <div class="stat"><span class="badge ab">4️⃣</span><div class="sl">Live Bus Tracking (52k+)</div></div>
+        <div class="stat"><span class="badge pb">5️⃣</span><div class="sl">Live Train Tracking (12k+)</div></div>
+        <div class="stat"><span class="badge rb">6️⃣</span><div class="sl">Hospital Bed Availability</div></div>
+        <div class="stat"><span class="badge gb">7️⃣</span><div class="sl">Emergency SOS via Satellite</div></div>
+        <div class="stat"><span class="badge bb">8️⃣</span><div class="sl">Weather Alerts & Forecast</div></div>
+        <div class="stat"><span class="badge tb">9️⃣</span><div class="sl">Multi-language Support (10+ langs)</div></div>
+        <div class="stat"><span
