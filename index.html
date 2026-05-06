@@ -2,676 +2,186 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Smart City QR Pole System | Satellite Connected | Final Year Project</title>
-  <meta name="description" content="Advanced Smart City QR Pole System with satellite connectivity, real-time bus tracking, multi-language support including Tamil, and comprehensive route management">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart City QR Pole · All India Satellite Command</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    /* Professional UI Variables */
+    :root {
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --border-radius-lg: 12px;
+      --border-radius-md: 8px;
+      --color-background-primary: #ffffff;
+      --color-background-secondary: #f5f5f5;
+      --color-text-primary: #111827;
+      --color-text-secondary: #6b7280;
     }
+    body { font-family: var(--font-sans); background: #f0f4f8; padding: 1rem; }
+    .app { max-width: 800px; margin: auto; }
+    
+    /* Header & Satellite Status */
+    .hdr { background: #050e1f; border-radius: var(--border-radius-lg); padding: 1.5rem; color: white; margin-bottom: 10px; }
+    .sat-status { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 10px; font-size: 12px; }
+    .pulse { animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1 } 50% { opacity: 0.3 } }
 
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #0a0f1a 0%, #0f172a 100%);
-      min-height: 100vh;
-      padding: 20px;
-      color: #e2e8f0;
-    }
+    /* Navigation */
+    .nav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
+    .nb { padding: 8px 12px; border-radius: var(--border-radius-md); border: 1px solid #ccc; background: white; cursor: pointer; display: flex; align-items: center; gap: 5px; font-size: 12px; }
+    .nb.on { background: #185FA5; color: white; border-color: #185FA5; }
 
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #1e293b; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb { background: #378ADD; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: #5ba3e6; }
-
-    /* Main Container */
-    .app {
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    /* Header with Animation */
-    .header {
-      background: linear-gradient(135deg, rgba(5,14,31,0.95) 0%, rgba(15,23,42,0.95) 100%);
-      backdrop-filter: blur(10px);
-      border-radius: 28px;
-      padding: 20px 28px;
-      margin-bottom: 20px;
-      border: 1px solid rgba(55,138,221,0.3);
-      box-shadow: 0 20px 40px -15px rgba(0,0,0,0.3);
-      animation: slideDown 0.6s ease-out;
-    }
-
-    @keyframes slideDown {
-      from { opacity: 0; transform: translateY(-30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .header-top {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    .satellite-ring {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #1e3a5f, #0f2b48);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      animation: pulse 2s infinite;
-    }
-
-    .satellite-ring::before {
-      content: '';
-      position: absolute;
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      border: 1px solid rgba(55,138,221,0.4);
-      animation: ripple 2s infinite;
-    }
-
-    .satellite-ring::after {
-      content: '';
-      position: absolute;
-      width: 85px;
-      height: 85px;
-      border-radius: 50%;
-      border: 1px solid rgba(55,138,221,0.2);
-      animation: ripple 2s infinite 0.5s;
-    }
-
-    @keyframes ripple {
-      0% { transform: scale(1); opacity: 0.6; }
-      100% { transform: scale(1.3); opacity: 0; }
-    }
-
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(55,138,221,0.4); }
-      50% { box-shadow: 0 0 0 8px rgba(55,138,221,0); }
-    }
-
-    .satellite-ring i {
-      font-size: 26px;
-      color: #85B7EB;
-      animation: float 3s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-3px); }
-    }
-
-    .header h1 {
-      font-size: 22px;
-      font-weight: 700;
-      background: linear-gradient(135deg, #fff, #85B7EB);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .header p {
-      font-size: 12px;
-      color: #94a3b8;
-      margin-top: 4px;
-    }
-
-    /* Status Cards */
-    .status-row {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      margin: 15px 0 12px 0;
-    }
-
-    .status-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(55,138,221,0.1);
-      padding: 6px 14px;
-      border-radius: 40px;
-      font-size: 12px;
-      border: 1px solid rgba(55,138,221,0.2);
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      animation: blink 1.5s infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-    /* Language Buttons */
-    .lang-buttons {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 12px;
-    }
-
-    .lang-btn {
-      padding: 6px 14px;
-      border-radius: 30px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: #cbd5e1;
-      font-size: 12px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-weight: 500;
-    }
-
-    .lang-btn:hover {
-      background: rgba(55,138,221,0.3);
-      border-color: #378ADD;
-      transform: translateY(-2px);
-    }
-
-    .lang-btn.active {
-      background: linear-gradient(135deg, #378ADD, #2563eb);
-      border-color: #378ADD;
-      color: white;
-      box-shadow: 0 4px 12px rgba(55,138,221,0.3);
-    }
-
-    /* Navigation Tabs */
-    .nav-tabs {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-      overflow-x: auto;
-      padding-bottom: 8px;
-    }
-
-    .nav-btn {
-      padding: 10px 20px;
-      border-radius: 40px;
-      background: rgba(30,41,59,0.8);
-      border: 1px solid rgba(71,85,105,0.5);
-      color: #94a3b8;
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-weight: 500;
-      backdrop-filter: blur(5px);
-    }
-
-    .nav-btn i {
-      font-size: 16px;
-    }
-
-    .nav-btn:hover {
-      background: rgba(55,138,221,0.2);
-      border-color: #378ADD;
-      transform: translateY(-2px);
-    }
-
-    .nav-btn.active {
-      background: linear-gradient(135deg, #378ADD, #2563eb);
-      border-color: #378ADD;
-      color: white;
-      box-shadow: 0 4px 15px rgba(55,138,221,0.4);
-    }
+    /* Map Styling */
+    .map-container { background: #d4e8f5; border-radius: var(--border-radius-lg); position: relative; overflow: hidden; height: 400px; border: 2px solid #050e1f; }
+    .city-label { font-size: 10px; fill: #050e1f; font-weight: bold; pointer-events: none; }
+    
+    /* Stats Grid */
+    .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 10px; }
+    .stat { background: white; padding: 15px; border-radius: var(--border-radius-md); text-align: center; border: 1px solid #e5e7eb; }
+    .sv { font-size: 22px; font-weight: bold; color: #185FA5; }
+    .sl { font-size: 11px; color: var(--color-text-secondary); text-transform: uppercase; }
 
     /* Panels */
-    .panel {
-      display: none;
-      animation: fadeIn 0.4s ease-out;
-    }
-
-    .panel.active {
-      display: block;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Cards */
-    .card {
-      background: rgba(15,23,42,0.8);
-      backdrop-filter: blur(10px);
-      border-radius: 24px;
-      padding: 20px;
-      margin-bottom: 20px;
-      border: 1px solid rgba(71,85,105,0.3);
-      transition: all 0.3s ease;
-    }
-
-    .card:hover {
-      border-color: rgba(55,138,221,0.4);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 18px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(71,85,105,0.3);
-    }
-
-    .card-header i {
-      font-size: 22px;
-      color: #378ADD;
-    }
-
-    .card-header h3 {
-      font-size: 16px;
-      font-weight: 600;
-      color: #f1f5f9;
-    }
-
-    /* Stats Grid */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 15px;
-      margin-bottom: 20px;
-    }
-
-    .stat-card {
-      background: linear-gradient(135deg, rgba(30,41,59,0.6), rgba(15,23,42,0.6));
-      border-radius: 20px;
-      padding: 16px;
-      border: 1px solid rgba(71,85,105,0.3);
-      transition: all 0.3s ease;
-    }
-
-    .stat-card:hover {
-      transform: translateY(-3px);
-      border-color: #378ADD;
-    }
-
-    .stat-label {
-      font-size: 12px;
-      color: #94a3b8;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .stat-value {
-      font-size: 28px;
-      font-weight: 700;
-      background: linear-gradient(135deg, #fff, #85B7EB);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .stat-unit {
-      font-size: 12px;
-      color: #64748b;
-    }
-
-    /* Route Cards */
-    .route-card {
-      background: rgba(30,41,59,0.5);
-      border-radius: 16px;
-      padding: 14px;
-      margin-bottom: 10px;
-      border: 1px solid rgba(71,85,105,0.2);
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-
-    .route-card:hover {
-      background: rgba(55,138,221,0.1);
-      border-color: #378ADD;
-      transform: translateX(5px);
-    }
-
-    .route-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      margin-bottom: 10px;
-    }
-
-    .route-number {
-      background: linear-gradient(135deg, #378ADD, #2563eb);
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      color: white;
-    }
-
-    .route-status {
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 10px;
-      font-weight: 600;
-    }
-
-    .status-on-time { background: #10b98120; color: #34d399; border: 1px solid #10b98140; }
-    .status-delayed { background: #f59e0b20; color: #fbbf24; border: 1px solid #f59e0b40; }
-    .status-arriving { background: #3b82f620; color: #60a5fa; border: 1px solid #3b82f640; }
-
-    .route-name {
-      font-size: 15px;
-      font-weight: 600;
-      color: #f1f5f9;
-      margin-bottom: 5px;
-    }
-
-    .route-details {
-      display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-      font-size: 11px;
-      color: #94a3b8;
-    }
-
-    .progress-bar {
-      height: 4px;
-      background: #1e293b;
-      border-radius: 4px;
-      overflow: hidden;
-      margin: 10px 0;
-    }
-
-    .progress-fill {
-      height: 100%;
-      border-radius: 4px;
-      background: linear-gradient(90deg, #378ADD, #60a5fa);
-      transition: width 0.5s ease;
-    }
-
-    /* Search Box */
-    .search-box {
-      width: 100%;
-      padding: 12px 16px;
-      background: rgba(30,41,59,0.6);
-      border: 1px solid rgba(71,85,105,0.4);
-      border-radius: 40px;
-      color: #f1f5f9;
-      font-size: 13px;
-      margin-bottom: 15px;
-      transition: all 0.3s ease;
-    }
-
-    .search-box:focus {
-      outline: none;
-      border-color: #378ADD;
-      box-shadow: 0 0 0 3px rgba(55,138,221,0.2);
-    }
-
-    .search-box::placeholder {
-      color: #64748b;
-    }
-
-    /* Tamil Text Support */
-    .lang-ta {
-      font-family: 'Noto Sans Tamil', 'Inter', sans-serif;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      body { padding: 12px; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .stat-value { font-size: 22px; }
-      .header h1 { font-size: 18px; }
-      .nav-btn { padding: 7px 14px; font-size: 11px; }
-    }
-
-    /* Loading Animation */
-    .loading {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 2px solid #378ADD;
-      border-top-color: transparent;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    /* Floating Animation for elements */
-    .floating {
-      animation: floatElement 4s ease-in-out infinite;
-    }
-
-    @keyframes floatElement {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-    }
+    .panel { display: none; background: white; padding: 20px; border-radius: var(--border-radius-lg); border: 1px solid #e5e7eb; }
+    .panel.on { display: block; }
+    
+    .tour-card { border-bottom: 1px solid #eee; padding: 10px 0; }
+    .tour-name { font-weight: bold; color: #185FA5; }
   </style>
 </head>
 <body>
 
 <div class="app">
-  <!-- Header -->
-  <div class="header">
-    <div class="header-top">
-      <div class="satellite-ring">
-        <i class="ti ti-antenna"></i>
-      </div>
+  <div class="hdr">
+    <div style="display:flex; align-items:center; gap:15px;">
+      <i class="ti ti-satellite-connected" style="font-size: 40px; color: #85B7EB;"></i>
       <div>
-        <h1 id="mainTitle">Smart City QR Pole System</h1>
-        <p id="subTitle">ISRO NavIC + GPS | Satellite Connected | Pan-India Coverage</p>
+        <h1 style="font-size: 20px;">Smart City QR Pole · All India Command</h1>
+        <p style="opacity: 0.6; font-size: 12px;">Network: NavIC + GAGAN · Monitoring 5,000+ Cities · Live Feed</p>
       </div>
     </div>
-    <div class="status-row">
-      <div class="status-item"><div class="status-dot" style="background:#10b981"></div><span id="navicStatus">NavIC: 7 Satellites</span></div>
-      <div class="status-item"><div class="status-dot" style="background:#3b82f6"></div><span id="gpsStatus">GPS: 24 Satellites</span></div>
-      <div class="status-item"><div class="status-dot" style="background:#f59e0b"></div><span id="signalStatus">Signal: 98.7%</span></div>
-      <div class="status-item"><div class="status-dot" style="background:#06b6d4"></div><span id="coverageStatus">Coverage: 28 States + 8 UTs</span></div>
-    </div>
-    <div class="lang-buttons">
-      <button class="lang-btn active" onclick="setLanguage('en', this)">🇬🇧 English</button>
-      <button class="lang-btn" onclick="setLanguage('ta', this)">🌺 தமிழ்</button>
-      <button class="lang-btn" onclick="setLanguage('hi', this)">🇮🇳 हिंदी</button>
-      <button class="lang-btn" onclick="setLanguage('te', this)">🏵️ తెలుగు</button>
-      <button class="lang-btn" onclick="setLanguage('bn', this)">🐟 বাংলা</button>
-      <button class="lang-btn" onclick="setLanguage('mr', this)">🦋 मराठी</button>
-      <button class="lang-btn" onclick="setLanguage('kn', this)">🐘 ಕನ್ನಡ</button>
-      <button class="lang-btn" onclick="setLanguage('ml', this)">🌴 മലയാളം</button>
+    <div class="sat-status">
+      <span><i class="ti ti-circle-filled pulse" style="color:#639922"></i> Satellite: ACTIVE</span>
+      <span><i class="ti ti-access-point" style="color:#378ADD"></i> Nodes: 5,420 Connected</span>
+      <span><i class="ti ti-refresh" style="color:#EF9F27"></i> Refresh: Real-time</span>
     </div>
   </div>
 
-  <!-- Navigation -->
-  <div class="nav-tabs">
-    <button class="nav-btn active" onclick="showPanel('dashboard', this)"><i class="ti ti-dashboard"></i><span id="navDashboard">Dashboard</span></button>
-    <button class="nav-btn" onclick="showPanel('buses', this)"><i class="ti ti-bus"></i><span id="navBuses">Buses & Routes</span></button>
-    <button class="nav-btn" onclick="showPanel('trains', this)"><i class="ti ti-train"></i><span id="navTrains">Trains</span></button>
-    <button class="nav-btn" onclick="showPanel('hospitals', this)"><i class="ti ti-building-hospital"></i><span id="navHospitals">Hospitals</span></button>
-    <button class="nav-btn" onclick="showPanel('routes', this)"><i class="ti ti-road"></i><span id="navRoutes">All Routes</span></button>
-    <button class="nav-btn" onclick="showPanel('cities', this)"><i class="ti ti-building"></i><span id="navCities">Cities</span></button>
-    <button class="nav-btn" onclick="showPanel('satellite', this)"><i class="ti ti-antenna"></i><span id="navSatellite">Satellite</span></button>
-    <button class="nav-btn" onclick="showPanel('emergency', this)"><i class="ti ti-phone-call"></i><span id="navEmergency">Emergency</span></button>
+  <div class="g4">
+    <div class="stat"><div class="sl">Active Buses</div><div class="sv">5,000+</div></div>
+    <div class="stat"><div class="sl">Live Trains</div><div class="sv">1,000+</div></div>
+    <div class="stat"><div class="sl">Cities</div><div class="sv">5,000+</div></div>
+    <div class="stat"><div class="sl">QR Nodes</div><div class="sv">12,400</div></div>
   </div>
 
-  <!-- DASHBOARD PANEL -->
-  <div id="panel-dashboard" class="panel active">
-    <div class="stats-grid">
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-bus"></i> Active Buses</div><div class="stat-value">52,847</div><div class="stat-unit">across India</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-train"></i> Active Trains</div><div class="stat-value">12,456</div><div class="stat-unit">daily services</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-building-hospital"></i> Hospitals</div><div class="stat-value">25,891</div><div class="stat-unit">with bed tracking</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-building"></i> Cities Covered</div><div class="stat-value">10,847</div><div class="stat-unit">pan-India</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-road"></i> Bus Routes</div><div class="stat-value">18,342</div><div class="stat-unit">intercity + intracity</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-map"></i> Train Routes</div><div class="stat-value">7,421</div><div class="stat-unit">all railway zones</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-qrcode"></i> QR Poles</div><div class="stat-value">45,892</div><div class="stat-unit">smart city network</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-cloud"></i> Satellite Accuracy</div><div class="stat-value">±0.5m</div><div class="stat-unit">NavIC + GPS</div></div>
-    </div>
+  <div class="nav">
+    <button class="nb on" onclick="showP('map',this)"><i class="ti ti-map-2"></i> Tracking Map</button>
+    <button class="nb" onclick="showP('tourism',this)"><i class="ti ti-camera"></i> Regional Tourism</button>
+    <button class="nb" onclick="showP('transit',this)"><i class="ti ti-bus"></i> Live Transit</button>
+  </div>
 
-    <div class="card">
-      <div class="card-header"><i class="ti ti-map-2"></i><h3 id="liveMapTitle">Live India Route Map</h3></div>
-      <svg width="100%" height="280" viewBox="0 0 800 400" style="background: linear-gradient(135deg, #0f172a, #1e293b); border-radius: 16px;">
-        <rect width="800" height="400" fill="url(#bgGrad)" rx="12"/>
-        <defs><linearGradient id="bgGrad"><stop offset="0%" stop-color="#0f172a"/><stop offset="100%" stop-color="#1e293b"/></linearGradient></defs>
-        <g opacity="0.6">
-          <line x1="200" y1="80" x2="600" y2="200" stroke="#378ADD" stroke-width="2" stroke-dasharray="8,4" class="route-line"/>
-          <line x1="150" y1="250" x2="550" y2="320" stroke="#10b981" stroke-width="2" stroke-dasharray="8,4" class="route-line"/>
-          <line x1="300" y1="60" x2="650" y2="280" stroke="#f59e0b" stroke-width="2" stroke-dasharray="8,4" class="route-line"/>
-          <line x1="250" y1="320" x2="500" y2="150" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="8,4" class="route-line"/>
-        </g>
-        <g>
-          <circle cx="280" cy="100" r="6" fill="#378ADD"/><text x="286" y="98" fill="#cbd5e1" font-size="8">Delhi</text>
-          <circle cx="500" cy="200" r="6" fill="#378ADD"/><text x="506" y="198" fill="#cbd5e1" font-size="8">Kolkata</text>
-          <circle cx="320" cy="250" r="6" fill="#378ADD"/><text x="326" y="248" fill="#cbd5e1" font-size="8">Mumbai</text>
-          <circle cx="450" cy="280" r="6" fill="#378ADD"/><text x="456" y="278" fill="#cbd5e1" font-size="8">Chennai</text>
-          <circle cx="420" cy="230" r="6" fill="#378ADD"/><text x="426" y="228" fill="#cbd5e1" font-size="8">Hyderabad</text>
-          <circle cx="380" cy="290" r="6" fill="#378ADD"/><text x="386" y="288" fill="#cbd5e1" font-size="8">Bengaluru</text>
-        </g>
-        <rect x="15" y="15" width="180" height="70" rx="8" fill="rgba(5,14,31,0.9)"/>
-        <text x="25" y="32" fill="#85B7EB" font-size="10" font-weight="bold">📊 Route Statistics</text>
-        <text x="25" y="48" fill="#94a3b8" font-size="9">🚍 Bus Routes: 18,342</text>
-        <text x="25" y="62" fill="#94a3b8" font-size="9">🚆 Train Routes: 7,421</text>
-        <text x="25" y="76" fill="#94a3b8" font-size="9">🏥 Emergency Services: 24/7</text>
+  <!-- Map Panel -->
+  <div id="p-map" class="panel on">
+    <div class="map-container">
+      <svg width="100%" height="100%" viewBox="0 0 400 400">
+        <!-- Simplified India South Representation -->
+        <path d="M150,50 L250,50 L300,200 L200,380 L100,200 Z" fill="#c8e0b0" stroke="#8ab870" />
+        
+        <!-- City Nodes -->
+        <circle cx="280" cy="220" r="6" fill="red" class="pulse">
+          <title>Chennai Hub</title>
+        </circle>
+        <text x="290" y="225" class="city-label">Chennai</text>
+
+        <circle cx="270" cy="250" r="4" fill="#185FA5"></circle>
+        <text x="280" y="255" class="city-label">Pondicherry</text>
+
+        <circle cx="230" cy="300" r="4" fill="#185FA5"></circle>
+        <text x="240" y="305" class="city-label">Kumbakonam</text>
+
+        <circle cx="210" cy="310" r="4" fill="#185FA5"></circle>
+        <text x="160" y="315" class="city-label">Thanjavur</text>
+
+        <circle cx="180" cy="200" r="4" fill="#185FA5"></circle>
+        <text x="140" y="195" class="city-label">Hosur</text>
+
+        <!-- Route Lines -->
+        <line x1="280" y1="220" x2="270" y2="250" stroke="#185FA5" stroke-dasharray="4" />
+        <line x1="270" y1="250" x2="230" y2="300" stroke="#185FA5" stroke-dasharray="4" />
       </svg>
     </div>
+    <p style="font-size: 11px; margin-top: 10px; color: #666;">* Showing active satellite telemetry for Tamil Nadu & Puducherry sectors.</p>
+  </div>
 
-    <div class="stats-grid">
-      <div class="stat-card floating"><div class="stat-label"><i class="ti ti-clock"></i> Real-time Updates</div><div class="stat-value">2.4M</div><div class="stat-unit">scans/day</div></div>
-      <div class="stat-card floating"><div class="stat-label"><i class="ti ti-checkbox"></i> Resolution Rate</div><div class="stat-value">94%</div><div class="stat-unit">complaints resolved</div></div>
-      <div class="stat-card floating"><div class="stat-label"><i class="ti ti-users"></i> Daily Users</div><div class="stat-value">8.2M</div><div class="stat-unit">active citizens</div></div>
-      <div class="stat-card floating"><div class="stat-label"><i class="ti ti-star"></i> System Uptime</div><div class="stat-value">99.94%</div><div class="stat-unit">reliability</div></div>
+  <!-- Tourism Panel -->
+  <div id="p-tourism" class="panel">
+    <h3>Regional Major Attractions</h3>
+    <div class="tour-card">
+      <div class="tour-name">Chennai: Marina Beach & Kapaleeshwarar Temple</div>
+      <p style="font-size:12px">Gateway to South India, known for Dravidian architecture and the world's second-longest urban beach.</p>
+    </div>
+    <div class="tour-card">
+      <div class="tour-name">Pondicherry: Auroville & Promenade Beach</div>
+      <p style="font-size:12px">The French Riviera of the East. Heritage walks and spiritual retreats.</p>
+    </div>
+    <div class="tour-card">
+      <div class="tour-name">Kumbakonam: The Temple City</div>
+      <p style="font-size:12px">Famous for Mahamaham festival and Adi Kumbeswarar Temple.</p>
+    </div>
+    <div class="tour-card">
+      <div class="tour-name">Thanjavur: Brihadisvara Temple</div>
+      <p style="font-size:12px">UNESCO World Heritage site, home to the Great Living Chola Temples.</p>
+    </div>
+    <div class="tour-card">
+      <div class="tour-name">Tiruvannamalai: Annamalaiyar Temple</div>
+      <p style="font-size:12px">Significant spiritual hub at the foot of the sacred Annamalai hill.</p>
     </div>
   </div>
 
-  <!-- BUSES & ROUTES PANEL -->
-  <div id="panel-buses" class="panel">
-    <div class="stats-grid">
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-bus"></i> Total Buses</div><div class="stat-value">52,847</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-road"></i> Total Routes</div><div class="stat-value">18,342</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-clock"></i> On-Time Rate</div><div class="stat-value">86%</div></div>
-    </div>
-    
-    <div class="card">
-      <div class="card-header"><i class="ti ti-bus"></i><h3 id="busRoutesTitle">Live Bus Routes Across India</h3></div>
-      <input type="text" class="search-box" id="busSearch" placeholder="🔍 Search bus route, number, or city..." onkeyup="filterBusRoutes()">
-      <div id="busRoutesList" style="max-height: 500px; overflow-y: auto;"></div>
-    </div>
-  </div>
-
-  <!-- TRAINS PANEL -->
-  <div id="panel-trains" class="panel">
-    <div class="stats-grid">
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-train"></i> Active Trains</div><div class="stat-value">12,456</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-map"></i> Train Routes</div><div class="stat-value">7,421</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-users"></i> Daily Passengers</div><div class="stat-value">23.5M</div></div>
-    </div>
-    <div class="card">
-      <div class="card-header"><i class="ti ti-train"></i><h3>Live Train Status · IRCTC Integration</h3></div>
-      <input type="text" class="search-box" id="trainSearch" placeholder="🔍 Search train number or name..." onkeyup="filterTrains()">
-      <div id="trainsList" style="max-height: 500px; overflow-y: auto;"></div>
-    </div>
-  </div>
-
-  <!-- HOSPITALS PANEL -->
-  <div id="panel-hospitals" class="panel">
-    <div class="stats-grid">
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-building-hospital"></i> Total Hospitals</div><div class="stat-value">25,891</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-bed"></i> Available Beds</div><div class="stat-value">128,456</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-ambulance"></i> Ambulances</div><div class="stat-value">8,234</div></div>
-    </div>
-    <div class="card">
-      <div class="card-header"><i class="ti ti-building-hospital"></i><h3>Hospitals with Live Bed Availability</h3></div>
-      <input type="text" class="search-box" id="hospitalSearch" placeholder="🔍 Search hospital by name or city..." onkeyup="filterHospitals()">
-      <div id="hospitalsList" style="max-height: 500px; overflow-y: auto;"></div>
-    </div>
-  </div>
-
-  <!-- ALL ROUTES PANEL -->
-  <div id="panel-routes" class="panel">
-    <div class="stats-grid">
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-bus"></i> Bus Routes</div><div class="stat-value">18,342</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-train"></i> Train Routes</div><div class="stat-value">7,421</div></div>
-      <div class="stat-card"><div class="stat-label"><i class="ti ti-road"></i> National Highways</div><div class="stat-value">151,019 km</div></div>
-    </div>
-    <div class="card">
-      <div class="card-header"><i class="ti ti-road"></i><h3>Complete Route Network · India</h3></div>
-      <div id="allRoutesList"></div>
-    </div>
-  </div>
-
-  <!-- CITIES PANEL -->
-  <div id="panel-cities" class="panel">
-    <div class="stats-grid">
-      <div class="stat-card"><div class="stat-label">States/UTs</div><div class="stat-value">36</div></div>
-      <div class="stat-card"><div class="stat-label">Districts</div><div class="stat-value">766</div></div>
-      <div class="stat-card"><div class="stat-label">Cities/Towns</div><div class="stat-value">10,847</div></div>
-    </div>
-    <div class="card">
-      <div class="card-header"><i class="ti ti-building"></i><h3>All Cities Covered</h3></div>
-      <input type="text" class="search-box" id="citySearch" placeholder="🔍 Search your city..." onkeyup="filterCities()">
-      <div id="citiesList" class="city-grid"></div>
-    </div>
-  </div>
-
-  <!-- SATELLITE PANEL -->
-  <div id="panel-satellite" class="panel">
-    <div class="card">
-      <div class="card-header"><i class="ti ti-antenna"></i><h3>ISRO NavIC · GPS · GLONASS Integration</h3></div>
-      <div class="stats-grid">
-        <div class="stat-card"><div class="stat-label">NavIC Satellites</div><div class="stat-value">7</div></div>
-        <div class="stat-card"><div class="stat-label">GPS Satellites</div><div class="stat-value">24</div></div>
-        <div class="stat-card"><div class="stat-label">GLONASS</div><div class="stat-value">24</div></div>
-        <div class="stat-card"><div class="stat-label">Accuracy</div><div class="stat-value">±0.5m</div></div>
-      </div>
-      <div class="progress-bar"><div class="progress-fill" style="width:99%"></div></div>
-    </div>
-  </div>
-
-  <!-- EMERGENCY PANEL -->
-  <div id="panel-emergency" class="panel">
-    <div class="card">
-      <div class="card-header"><i class="ti ti-phone-call"></i><h3>National Emergency Helplines</h3></div>
-      <div class="stats-grid">
-        <div class="stat-card"><div class="stat-value">112</div><div class="stat-label">Emergency Response</div></div>
-        <div class="stat-card"><div class="stat-value">100</div><div class="stat-label">Police</div></div>
-        <div class="stat-card"><div class="stat-value">108</div><div class="stat-label">Ambulance</div></div>
-        <div class="stat-card"><div class="stat-value">101</div><div class="stat-label">Fire</div></div>
-        <div class="stat-card"><div class="stat-value">1091</div><div class="stat-label">Women Helpline</div></div>
-        <div class="stat-card"><div class="stat-value">1098</div><div class="stat-label">Child Helpline</div></div>
-      </div>
-    </div>
+  <!-- Transit Panel -->
+  <div id="p-transit" class="panel">
+    <h3>Live Fleet Status (Top Routes)</h3>
+    <table style="width:100%; font-size: 13px; text-align: left; border-collapse: collapse;">
+      <thead>
+        <tr style="background: #f5f5f5;">
+          <th style="padding:10px;">Vehicle ID</th>
+          <th>Route</th>
+          <th>Status</th>
+          <th>ETA</th>
+        </tr>
+      </thead>
+      <tbody id="transitBody">
+        <!-- Populated via script -->
+      </tbody>
+    </table>
   </div>
 </div>
 
 <script>
-  // Language Translations
-  const translations = {
-    en: {
-      mainTitle: "Smart City QR Pole System",
-      subTitle: "ISRO NavIC + GPS | Satellite Connected | Pan-India Coverage",
-      navDashboard: "Dashboard", navBuses: "Buses & Routes", navTrains: "Trains",
-      navHospitals: "Hospitals", navRoutes: "All Routes", navCities: "Cities",
-      navSatellite: "Satellite", navEmergency: "Emergency",
-      busRoutesTitle: "Live Bus Routes Across India"
-    },
-    ta: {
-      mainTitle: "ஸ்மார்ட் சிட்டி QR போல் அமைப்பு",
-      subTitle: "இஸ்ரோ NavIC + GPS | செயற்கைக்கோள் இணைப்பு | அனைத்து இந்தியா கவரேஜ்",
-      navDashboard: "கட்டுப்பாட்டு அறை", navBuses: "பேருந்துகள் மற்றும் வழித்தடங்கள்", navTrains: "ரயில்கள்",
-      navHospitals: "மருத்துவமனைகள்", navRoutes: "அனைத்து வழித்தடங்கள்", navCities: "நகரங்கள்",
-      navSatellite: "செயற்கைக்கோள்", navEmergency: "அ
+  function showP(id, btn) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('on'));
+    document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
+    document.getElementById('p-' + id).classList.add('on');
+    btn.classList.add('on');
+  }
+
+  const routes = [
+    {id: 'TN-01-A1', route: 'Chennai → Pondicherry', status: 'Live', eta: '12 mins'},
+    {id: 'TN-45-B2', route: 'Villupuram → Kumbakonam', status: 'On Time', eta: '5 mins'},
+    {id: 'TN-23-C3', route: 'Hosur → Chennai Express', status: 'Active', eta: '25 mins'},
+    {id: 'IR-12601', route: 'Chennai → Thanjavur (Train)', status: 'Live', eta: '14:20'},
+    {id: 'TN-15-D4', route: 'Jayankondam → Tiruvannamalai', status: 'Delayed', eta: '45 mins'}
+  ];
+
+  const tbody = document.getElementById('transitBody');
+  tbody.innerHTML = routes.map(r => `
+    <tr style="border-bottom: 1px solid #eee;">
+      <td style="padding:10px; font-weight:bold;">${r.id}</td>
+      <td>${r.route}</td>
+      <td><span style="color:${r.status === 'Delayed' ? 'red' : 'green'}">● ${r.status}</span></td>
+      <td>${r.eta}</td>
+    </tr>
+  `).join('');
+</script>
+
+</body>
+</html>
